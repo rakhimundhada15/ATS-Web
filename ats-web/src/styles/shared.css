@@ -1,0 +1,5 @@
+/*Append * to label of required fields*/
+label.required:after {
+    content:" * ";
+    color:red;
+}
