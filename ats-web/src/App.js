@@ -1,8 +1,9 @@
 import React from 'react';
 import './styles/shared.css';
 import TextInput from './components/shared/TextInput';
-
+import ReactLoader from './components/shared/loader'
 function App() {
+    document.title = 'ATS';
   return (
     <>
       <div className="row">
@@ -29,6 +30,7 @@ function App() {
             error="Please enter valid email"
           />
         </div>
+        <ReactLoader loading="false"/>
       </div>
     </>
   );
