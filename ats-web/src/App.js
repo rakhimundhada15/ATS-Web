@@ -2,9 +2,10 @@ import React from 'react';
 import './styles/shared.css';
 import TextInput from './components/shared/TextInput';
 import ReactLoader from './components/shared/loader';
-import FileSelector from './components/shared/FileSelector'
+import FileSelector from './components/shared/FileSelector';
+import InputSpinner from './components/shared/InputSpinner';
 function App() {
-    document.title = 'ATS';
+  document.title = 'ATS';
   return (
     <>
       <div className="row">
@@ -31,7 +32,7 @@ function App() {
             error="Please enter valid email"
           />
         </div>
-        <ReactLoader loading="false"/>
+        <ReactLoader loading="false" />
         <div className="col-lg-6">
           <FileSelector
             id="file-selector"
@@ -43,6 +44,31 @@ function App() {
             isRequired={true}
             error="Please select a file"
             acceptFilesOfType="*.*"
+          />
+        </div>
+      </div>
+      <br /><br />
+      <div className="row">
+        <div className="col-lg-6">
+          <InputSpinner
+            name="inputSpinner"
+            min="0"
+            max="20"
+            isRequired="true"
+            label="Left Input Spinner"
+            errorMsg="Please select valid experience years"
+            onChange={(e) => console.log("On Change --->", e)}
+          />
+        </div>
+        <div className="col-lg-6">
+          <InputSpinner
+            name="input1Spinner"
+            min="0"
+            max="15"
+            isRequired="true"
+            label="Right Input Spinner"
+            errorMsg="Please select valid experience years"
+            onChange={(e) => console.log("On Change --->", e)}
           />
         </div>
       </div>
