@@ -28,6 +28,7 @@ TextInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    isRequired: PropTypes.bool,
     value: PropTypes.string,
     error: PropTypes.string,
     containerClass: PropTypes.string,
@@ -46,6 +47,7 @@ TextInput.defaultProps = {
     labelClass: "control-label col-sm-4",
     requiredLabelClass: "control-label required col-sm-4",
     fieldClass: "form-control",
+    isRequired: false,
 };
 
 export default TextInput;

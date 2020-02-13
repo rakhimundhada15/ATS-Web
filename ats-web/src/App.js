@@ -16,7 +16,7 @@ function App() {
             name="firstName"
             value=""
             onChange={(e) => console.log(e.target.value)}
-            isRequired="true"
+            isRequired={false}
           />
         </div>
         <div className="col-lg-6">
@@ -27,7 +27,7 @@ function App() {
             name="email"
             value=""
             onChange={(e) => console.log(e.target.value)}
-            isRequired="true"
+            isRequired={true}
             error="Please enter valid email"
           />
         </div>
@@ -40,8 +40,9 @@ function App() {
             name="fileSelector"
             value=""
             onChange={(e) => console.log("On Change --->", e.target.files[0])}
-            isRequired="true"
-            error="Please select a valid file"
+            isRequired={true}
+            error="Please select a file"
+            acceptFilesOfType="*.*"
           />
         </div>
       </div>
