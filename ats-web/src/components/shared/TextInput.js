@@ -1,9 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
+import DefaultPropTypes from '../common/defaultPropTypes';
+import DefaultProps from '../common/defaultProps';
 
 function TextInput(props) {
     return (
-        <div className={props.error ? props.containerErrorClass : props.containerClass }>
+        <div className={props.errorMsg ? props.containerErrorClass : props.containerClass }>
             <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass  : props.labelClass}>{props.label}</label>
             <div className={props.controlClass}>
                 <input
@@ -14,8 +15,8 @@ function TextInput(props) {
                     onChange={props.onChange}
                     // value={props.value}
                 />
-                {props.error && (
-               <span className="help-block">{props.error}</span>
+                {props.errorMsg && (
+               <span className="help-block">{props.errorMsg}</span>
             )}
             </div>
 
@@ -23,31 +24,10 @@ function TextInput(props) {
     );
 }
 
-TextInput.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    isRequired: PropTypes.bool,
-    value: PropTypes.string,
-    error: PropTypes.string,
-    containerClass: PropTypes.string,
-    containerErrorClass: PropTypes.string,
-    fieldClass: PropTypes.string,
-    controlClass: PropTypes.string,
-    labelClass: PropTypes.string,
-    requiredLabelClass: PropTypes.string,
-};
 
-TextInput.defaultProps = {
-    error: "",
-    containerClass: "form-group",
-    containerErrorClass: "form-group has-error",
-    controlClass: "col-sm-8",
-    labelClass: "control-label col-sm-4",
-    requiredLabelClass: "control-label required col-sm-4",
-    fieldClass: "form-control",
-    isRequired: false,
-};
+TextInput.propTypes = new DefaultPropTypes();
+
+TextInput.defaultProps = new DefaultProps();
+
 
 export default TextInput;

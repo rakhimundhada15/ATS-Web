@@ -1,5 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import DefaultPropTypes from '../common/defaultPropTypes';
+import DefaultProps from '../common/defaultProps';
+
 
 class FileSelector extends React.Component{
     constructor(props){
@@ -39,8 +42,8 @@ class FileSelector extends React.Component{
                         <label 
                             className={this.props.fileNameLabelClass}
                             htmlFor={this.props.id}>{this.state.selectedFileName === "" ? this.props.fileNameLabel : this.state.selectedFileName}</label>
-                        {this.state.error && this.props.error && (
-                            <span className="help-block">{this.props.error}</span>
+                        {this.state.error && this.props.errorMsg && (
+                            <span className="help-block">{this.props.errorMsg}</span>
                         )}
                 </div>
             </div>
@@ -48,37 +51,18 @@ class FileSelector extends React.Component{
     }
 }
 
-FileSelector.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    isRequired: PropTypes.bool,
-    value: PropTypes.string,
-    error: PropTypes.string,
-    containerClass: PropTypes.string,
-    containerErrorClass: PropTypes.string,
-    fieldClass: PropTypes.string,
-    controlClass: PropTypes.string,
-    labelClass: PropTypes.string,
-    requiredLabelClass: PropTypes.string,
-    fileNameLabel: PropTypes.string,
-    fileNameLabelClass: PropTypes.string,
-    acceptFilesOfType: PropTypes.string,
-};
+FileSelector.propTypes = new DefaultPropTypes();
+//Add new prop types
+FileSelector.propTypes.fileNameLabel = PropTypes.string;
+FileSelector.propTypes.fileNameLabelClass = PropTypes.string;
+FileSelector.propTypes.acceptFilesOfType = PropTypes.string;
 
-FileSelector.defaultProps = {
-    error: "",
-    containerClass: "form-group",
-    containerErrorClass: "form-group has-error",
-    controlClass: "col-sm-8 custom-file",
-    labelClass: "control-label col-sm-4",
-    requiredLabelClass: "control-label required col-sm-4",
-    fieldClass: "custom-file-input",
-    fileNameLabel: "Choose File ...",
-    fileNameLabelClass: "custom-file-label text-left",
-    acceptFilesOfType: ".doc,.docx,.pdf,.txt,.rtf",
-    isRequired: false,
-};
+FileSelector.defaultProps = new DefaultProps();
+//Customize default props values
+FileSelector.defaultProps.controlClass = "col-sm-8 custom-file";
+FileSelector.defaultProps.fieldClass = "custom-file-input";
+FileSelector.defaultProps.fileNameLabel = "Choose File ...";
+FileSelector.defaultProps.fileNameLabelClass = "custom-file-label text-left";
+FileSelector.defaultProps.acceptFilesOfType = ".doc,.docx,.pdf,.txt,.rtf";
 
 export default FileSelector;

@@ -29,7 +29,7 @@ function App() {
             value=""
             onChange={(e) => console.log(e.target.value)}
             isRequired={true}
-            error="Please enter valid email"
+            errorMsg="Please enter valid email"
           />
         </div>
         <ReactLoader loading="false" />
@@ -42,7 +42,7 @@ function App() {
             value=""
             onChange={(e) => console.log("On Change --->", e.target.files[0])}
             isRequired={true}
-            error="Please select a file"
+            errorMsg="Please select a file"
             acceptFilesOfType="*.*"
           />
         </div>
@@ -52,9 +52,9 @@ function App() {
         <div className="col-lg-6">
           <InputSpinner
             name="inputSpinner"
-            min="0"
-            max="20"
-            isRequired="true"
+            min={0}
+            max={20}
+            isRequired={true}
             label="Left Input Spinner"
             errorMsg="Please select valid experience years"
             onChange={(e) => console.log("On Change --->", e)}
@@ -63,9 +63,9 @@ function App() {
         <div className="col-lg-6">
           <InputSpinner
             name="input1Spinner"
-            min="0"
-            max="15"
-            isRequired="true"
+            min={0}
+            max={15}
+            isRequired={true}
             label="Right Input Spinner"
             errorMsg="Please select valid experience years"
             onChange={(e) => console.log("On Change --->", e)}

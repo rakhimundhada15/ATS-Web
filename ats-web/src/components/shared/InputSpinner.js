@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from "prop-types";
+import DefaultPropTypes from '../common/defaultPropTypes';
 import DefaultProps from '../common/defaultProps';
 
 class InputSpinner extends React.Component {
@@ -35,6 +37,14 @@ class InputSpinner extends React.Component {
   }
 }
 
+InputSpinner.propTypes = new DefaultPropTypes();
+//Add new prop types
+InputSpinner.propTypes.min = PropTypes.number;
+InputSpinner.propTypes.max = PropTypes.number;
+
 InputSpinner.defaultProps = new DefaultProps();
+//Customize default props values
+InputSpinner.defaultProps.min = 0;
+InputSpinner.defaultProps.max = 100;
 
 export default InputSpinner;
