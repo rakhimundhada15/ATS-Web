@@ -1,26 +1,28 @@
+import { Input } from 'antd';
 import React from "react";
 import DefaultPropTypes from '../common/defaultPropTypes';
 import DefaultProps from '../common/defaultProps';
 
 function TextInput(props) {
     return (
-        <div className={props.errorMsg ? props.containerErrorClass : props.containerClass }>
-            <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass  : props.labelClass}>{props.label}</label>
-            <div className={props.controlClass}>
-                <input
-                    id={props.id}
-                    type="text"
-                    name={props.name}
-                    className={props.fieldClass}
-                    onChange={props.onChange}
-                    // value={props.value}
-                />
-                {props.errorMsg && (
-               <span className="help-block">{props.errorMsg}</span>
-            )}
+        <div className={props.errorMsg ? props.containerErrorClass : props.containerClass}>
+            <div className={props.labelWrapperClass}>
+                <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass : ""}>
+                    {props.label}
+                </label>
             </div>
-
-        </div>
+            <div className={props.fieldContainerClass}>
+                <div className={props.fieldWrapperClass}>
+                    <span className={props.fieldClass}>
+                        <input type="text" id={props.id} name={props.name} className={props.inputControlClass}   />
+                    </span>
+                    { props.errorMsg && (<div className="ant-form-explain">
+                            {props.errorMsg }
+                    </div> )
+                    }
+                </div>
+            </div>
+        </div>        
     );
 }
 

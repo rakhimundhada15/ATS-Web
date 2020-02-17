@@ -8,8 +8,8 @@ function App() {
   document.title = 'ATS';
   return (
     <>
-      <div className="row">
-        <div className="col-lg-6">
+      <div className="ant-row">
+        <div className="ant-col-12">
           <TextInput
             id="first-name"
             label="First Name"
@@ -20,7 +20,9 @@ function App() {
             isRequired={false}
           />
         </div>
-        <div className="col-lg-6">
+        </div>
+        <div className="ant-row">
+        <div className="ant-col-24">
           <TextInput
             id="email"
             label="Email"
@@ -30,10 +32,15 @@ function App() {
             onChange={(e) => console.log(e.target.value)}
             isRequired={true}
             errorMsg="Please enter valid email"
+            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-5"
+            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-12"
           />
         </div>
-        <ReactLoader loading="false" />
-        <div className="col-lg-6">
+        
+      </div>
+      <div className="ant-row">
+      <ReactLoader loading="false" />
+        <div className="ant-col-6">
           <FileSelector
             id="file-selector"
             label="Select : "
@@ -47,10 +54,11 @@ function App() {
           />
         </div>
       </div>
-      <br /><br />
-      <div className="row">
-        <div className="col-lg-6">
+      
+      <div className="ant-row">
+        <div className="ant-col-6">
           <InputSpinner
+            id="spinner1"
             name="inputSpinner"
             min={0}
             max={20}
@@ -60,8 +68,9 @@ function App() {
             onChange={(e) => console.log("On Change --->", e)}
           />
         </div>
-        <div className="col-lg-6">
+        <div className="ant-col-6">
           <InputSpinner
+            id="spinner2"
             name="input1Spinner"
             min={0}
             max={15}
