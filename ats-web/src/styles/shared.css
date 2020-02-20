@@ -3,3 +3,14 @@ label.required:after {
     content:" * ";
     color:red;
 }
+
+
+
+.marginbutton {
+    align-items: center;
+  margin: 0 28px 28px 50px;
+}
+
+.selectWidth {
+  width: 200px;
+}
