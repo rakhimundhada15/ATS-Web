@@ -5,7 +5,8 @@ import './index.css';
 import './styles/shared.css'; 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+import 'antd/dist/antd.css';
+import './styles/shared.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

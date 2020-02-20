@@ -4,6 +4,7 @@ label.required:after {
     color:red;
 }
 
+
 .loader {
     display: flex;
     justify-content: center;
@@ -18,4 +19,36 @@ label.required:after {
 .loader-icon svg { 
     width: 4em;
     height: 4em;
+}
+div.row{
+    margin-top:10px;
+}
+
+label.ant-form-item-required::after{
+    content: "*";
+    display: inline-block;
+    margin-left: 4px;
+    color: #f5222d;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+}
+
+.ant-form-item-required::before{
+    content: ""; 
+}
+
+.tab-container{
+    min-height: 200px;
+    padding: 25px;
+    margin: 25px;
+}
+
+.marginbutton {
+    align-items: center;
+  margin: 0 28px 28px 50px;
+}
+
+.selectWidth {
+  width: 200px;
 }

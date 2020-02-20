@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextInput from './components/shared/TextInput';
-import ReactLoader from './components/shared/loader';
+import TestComponent from './TestComponent'
+import HorizontalTabs from './components/shared/HorizontalTabs';
+import Loader from './components/shared/loader';
 import FileSelector from './components/shared/FileSelector';
 import InputSpinner from './components/shared/InputSpinner';
-import Loader from './components/shared/loader';
 import DateTimePicker from './components/shared/datePicker';
 
 function App() {
     document.title = 'ATS';
+    const [TabList, setTabList] = useState([]);
     // added below variable to render error message conditionally
-    const selectDate = true;
+    const selectDate = true
+    useEffect(() => {
+        let tab_list = [];
+        tab_list.push({ "title": "Candidate Details", "URL": <TestComponent tabDetails="CandidateDetails" numberOfRows={2} /> });
+        tab_list.push({ "title": "Feedback", "URL": <TestComponent tabDetails="Feedback" numberOfRows={5} /> });
+        setTabList(tab_list)
+    }, []);
+
     return (
         <>
             <div className="ant-row">
@@ -39,11 +48,19 @@ function App() {
                         labelWrapperClass="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-5"
                         fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-12"
                     />
-                </div>
+                </div>  
 
             </div>
             <div className="ant-row">
-                <ReactLoader loading="false" />
+                <div className="ant-col-6">
+                    <Loader loading={true} />
+                </div>
+                <div className="ant-col-6">
+                    <DateTimePicker id="date-picker"
+                        label="Date Picker" error={selectDate ? 'Please select a date' : ''} onChange={(date) => console.log("Interview schedule on ", date)} />
+                </div>
+            </div>
+            <div className="ant-row">
                 <div className="ant-col-6">
                     <FileSelector
                         id="file-selector"
@@ -85,14 +102,8 @@ function App() {
                     />
                 </div>
             </div>
-            <div className="ant-row">
-                <div className="ant-col-12">
-                    <Loader loading={true} />
-                </div>
-                <div className="ant-col-12">
-                    <DateTimePicker id="date-picker"
-                        label="Date Picker"  error={selectDate ? 'Please select a date':''} onChange={(date) => console.log("Interview schedule on ", date)}/>
-                </div>
+            <div className="tab-container">
+                <HorizontalTabs tabList={TabList} />
             </div>
         </>
     );
