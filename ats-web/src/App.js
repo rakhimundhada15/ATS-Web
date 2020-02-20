@@ -1,12 +1,23 @@
-import React from 'react';
-import './styles/shared.css';
+import React,{useState,useEffect} from 'react';
 import TextInput from './components/shared/TextInput';
+import TestComponent from './TestComponent'
+import HorizontalTabs from './components/shared/HorizontalTabs';
 import ReactLoader from './components/shared/loader';
 import FileSelector from './components/shared/FileSelector';
 import InputSpinner from './components/shared/InputSpinner';
+
 function App() {
-  document.title = 'ATS';
-  return (
+document.title = 'ATS';
+const [TabList,setTabList] = useState([]);
+
+useEffect (()=>{
+  let tab_list = [];
+  tab_list.push({"title":"Candidate Details","URL":<TestComponent tabDetails="CandidateDetails" numberOfRows={2}/>});
+  tab_list.push({"title":"Feedback","URL":<TestComponent tabDetails="Feedback" numberOfRows={5}/>});
+  setTabList(tab_list)
+},[]);
+
+return (
     <>
       <div className="ant-row">
         <div className="ant-col-12">
@@ -80,6 +91,9 @@ function App() {
             onChange={(e) => console.log("On Change --->", e)}
           />
         </div>
+      </div>
+      <div className="tab-container">
+        <HorizontalTabs tabList={TabList} />
       </div>
     </>
   );

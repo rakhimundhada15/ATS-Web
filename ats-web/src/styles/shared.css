@@ -4,7 +4,29 @@ label.required:after {
     color:red;
 }
 
+div.row{
+    margin-top:10px;
+}
 
+label.ant-form-item-required::after{
+    content: "*";
+    display: inline-block;
+    margin-left: 4px;
+    color: #f5222d;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+}
+
+.ant-form-item-required::before{
+    content: ""; 
+}
+
+.tab-container{
+    min-height: 200px;
+    padding: 25px;
+    margin: 25px;
+}
 
 .marginbutton {
     align-items: center;
