@@ -1,51 +1,35 @@
+import { Input } from 'antd';
 import React from "react";
-import PropTypes from "prop-types";
+import DefaultPropTypes from '../common/defaultPropTypes';
+import DefaultProps from '../common/defaultProps';
 
 function TextInput(props) {
     return (
-        <div className={props.error ? props.containerErrorClass : props.containerClass }>
-            <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass  : props.labelClass}>{props.label}</label>
-            <div className={props.controlClass}>
-                <input
-                    id={props.id}
-                    type="text"
-                    name={props.name}
-                    className={props.fieldClass}
-                    onChange={props.onChange}
-                    // value={props.value}
-                />
-                {props.error && (
-               <span className="help-block">{props.error}</span>
-            )}
+        <div className={props.errorMsg ? props.containerErrorClass : props.containerClass}>
+            <div className={props.labelWrapperClass}>
+                <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass : ""}>
+                    {props.label}
+                </label>
             </div>
-
-        </div>
+            <div className={props.fieldContainerClass}>
+                <div className={props.fieldWrapperClass}>
+                    <span className={props.fieldClass}>
+                        <input type="text" id={props.id} name={props.name} className={props.inputControlClass}   />
+                    </span>
+                    { props.errorMsg && (<div className="ant-form-explain">
+                            {props.errorMsg }
+                    </div> )
+                    }
+                </div>
+            </div>
+        </div>        
     );
 }
 
-TextInput.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
-    error: PropTypes.string,
-    containerClass: PropTypes.string,
-    containerErrorClass: PropTypes.string,
-    fieldClass: PropTypes.string,
-    controlClass: PropTypes.string,
-    labelClass: PropTypes.string,
-    requiredLabelClass: PropTypes.string,
-};
 
-TextInput.defaultProps = {
-    error: "",
-    containerClass: "form-group",
-    containerErrorClass: "form-group has-error",
-    controlClass: "col-sm-8",
-    labelClass: "control-label col-sm-4",
-    requiredLabelClass: "control-label required col-sm-4",
-    fieldClass: "form-control",
-};
+TextInput.propTypes = new DefaultPropTypes();
+
+TextInput.defaultProps = new DefaultProps();
+
 
 export default TextInput;
