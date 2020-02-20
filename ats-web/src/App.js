@@ -8,6 +8,8 @@ import DateTimePicker from './components/shared/datePicker';
 
 function App() {
     document.title = 'ATS';
+    // added below variable to render error message conditionally
+    const selectDate = true;
     return (
         <>
             <div className="ant-row">
@@ -85,11 +87,11 @@ function App() {
             </div>
             <div className="ant-row">
                 <div className="ant-col-12">
-                    <Loader loading="false" />
+                    <Loader loading={true} />
                 </div>
                 <div className="ant-col-12">
                     <DateTimePicker id="date-picker"
-                        label="Date Picker"  error="Please select a date" onChange={(date) => console.log("Interview schedule on ", date)}/>
+                        label="Date Picker"  error={selectDate ? 'Please select a date':''} onChange={(date) => console.log("Interview schedule on ", date)}/>
                 </div>
             </div>
         </>
