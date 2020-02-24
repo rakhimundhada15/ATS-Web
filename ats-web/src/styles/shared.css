@@ -18,8 +18,15 @@ label.ant-form-item-required::after{
     line-height: 1;
 }
 
+label.ant-form-item::after{
+    content: "";
+}
 .ant-form-item-required::before{
     content: ""; 
+}
+
+.ant-form-item-label{
+    text-align: left;
 }
 
 .tab-container{
@@ -30,9 +37,26 @@ label.ant-form-item-required::after{
 
 .marginbutton {
     align-items: center;
-  margin: 0 28px 28px 50px;
+    margin: 0 28px 28px 50px;
 }
 
 .selectWidth {
   width: 200px;
+}
+
+.contentHeader{
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.divider{
+    border-bottom: 1px solid #d9d9d9; 
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.form-btn{
+    margin: 5px;
+}
+.pull-right{
+    text-align: right;
 }
