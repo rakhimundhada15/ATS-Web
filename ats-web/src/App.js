@@ -5,6 +5,7 @@ import HorizontalTabs from './components/shared/HorizontalTabs';
 import Loader from './components/shared/loader';
 import FileSelector from './components/shared/FileSelector';
 import InputSpinner from './components/shared/InputSpinner';
+import TextArea from './components/shared/TextArea';
 import DateTimePicker from './components/shared/datePicker';
 
 function App() {
@@ -105,6 +106,27 @@ function App() {
             <div className="tab-container">
                 <HorizontalTabs tabList={TabList} />
             </div>
+
+          <div className="ant-row">
+        <div className="ant-col-24">
+          <TextArea
+            id="jobDescription"
+            label="Job Description"
+            labelclassName=""
+            name="jobDescription"
+            value=""
+            onChange={(e) => console.log("On Change --->", e)}
+            isRequired={true}
+            errorMsg="Please enter valid job desciption"
+            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-5"
+            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-12"
+            cols="70"
+            rows="10"
+            maxlength="200"
+            minlength="20"
+          />
+        </div>
+        </div>
         </>
     );
 }
