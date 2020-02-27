@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.logo {
+  height: 57px;
+  background-image: url('./images/logo_niyuj.png');
+  background-repeat: no-repeat;
+  margin: 16px;
+}
+
+#root {
+  height: 100%;
+}
