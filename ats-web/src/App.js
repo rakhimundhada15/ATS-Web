@@ -1,102 +1,64 @@
-import React,{useState,useEffect} from 'react';
-import TextInput from './components/shared/TextInput';
-import TestComponent from './TestComponent'
-import HorizontalTabs from './components/shared/HorizontalTabs';
-import ReactLoader from './components/shared/loader';
-import FileSelector from './components/shared/FileSelector';
-import InputSpinner from './components/shared/InputSpinner';
+import React from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import modules from './modules';
+import 'antd/dist/antd.css';
+import './index.css';
+import { Layout, Menu, Icon } from 'antd';
 
-function App() {
-document.title = 'ATS';
-const [TabList,setTabList] = useState([]);
+const { Header, Content, Footer, Sider } = Layout;
 
-useEffect (()=>{
-  let tab_list = [];
-  tab_list.push({"title":"Candidate Details","URL":<TestComponent tabDetails="CandidateDetails" numberOfRows={2}/>});
-  tab_list.push({"title":"Feedback","URL":<TestComponent tabDetails="Feedback" numberOfRows={5}/>});
-  setTabList(tab_list)
-},[]);
+class App extends React.Component {
+  state = {
+    collapsed: false,
+    currentTab: ''
+  };
 
-return (
-    <>
-      <div className="ant-row">
-        <div className="ant-col-12">
-          <TextInput
-            id="first-name"
-            label="First Name"
-            labelclassName=""
-            name="firstName"
-            value=""
-            onChange={(e) => console.log(e.target.value)}
-            isRequired={false}
-          />
-        </div>
-        </div>
-        <div className="ant-row">
-        <div className="ant-col-24">
-          <TextInput
-            id="email"
-            label="Email"
-            labelclassName=""
-            name="email"
-            value=""
-            onChange={(e) => console.log(e.target.value)}
-            isRequired={true}
-            errorMsg="Please enter valid email"
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-5"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-12"
-          />
-        </div>
-        
-      </div>
-      <div className="ant-row">
-      <ReactLoader loading="false" />
-        <div className="ant-col-6">
-          <FileSelector
-            id="file-selector"
-            label="Select : "
-            labelclassName=""
-            name="fileSelector"
-            value=""
-            onChange={(e) => console.log("On Change --->", e.target.files[0])}
-            isRequired={true}
-            errorMsg="Please select a file"
-            acceptFilesOfType="*.*"
-          />
-        </div>
-      </div>
-      
-      <div className="ant-row">
-        <div className="ant-col-6">
-          <InputSpinner
-            id="spinner1"
-            name="inputSpinner"
-            min={0}
-            max={20}
-            isRequired={true}
-            label="Left Input Spinner"
-            errorMsg="Please select valid experience years"
-            onChange={(e) => console.log("On Change --->", e)}
-          />
-        </div>
-        <div className="ant-col-6">
-          <InputSpinner
-            id="spinner2"
-            name="input1Spinner"
-            min={0}
-            max={15}
-            isRequired={true}
-            label="Right Input Spinner"
-            errorMsg="Please select valid experience years"
-            onChange={(e) => console.log("On Change --->", e)}
-          />
-        </div>
-      </div>
-      <div className="tab-container">
-        <HorizontalTabs tabList={TabList} />
-      </div>
-    </>
-  );
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  render() {
+    return (
+      <Router>
+        <Layout style={{height: '100%'}}>
+          <Sider width={'224px'} trigger={null} collapsible collapsed={this.state.collapsed}>
+            <div className="logo" />
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentTab]}>
+              {modules.map(module => ( // with a name, and routes
+                <Menu.Item key={module.name}>
+                  <Link to={module.routeProps.path} onClick={() => (this.state.currentTab = module.name)}>
+                    <Icon type="user" />
+                    <span className="nav-text">
+                      {module.name}
+                    </span>
+                  </Link>
+                </Menu.Item>
+              ))}
+            </Menu>
+          </Sider>
+          <Layout>
+            <Header style={{ background: '#fff', padding: 0 }}>
+              <Icon
+                className="trigger"
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.toggle}
+              />
+            </Header>
+            <Content style={{ margin: '24px 16px 0' }}>
+              <div style={{ padding: 24, background: '#fff', minHeight: '100%' }}>
+                {modules.map(module => (
+                  <Route {...module.routeProps} key={module.name} />
+                ))}
+              </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>Resource Recruitment Planning ©{new Date().getFullYear()} Created by Niyuj Enterprises</Footer>
+          </Layout>
+        </Layout>
+      </Router>
+    )
+  };
 }
 
 export default App;
