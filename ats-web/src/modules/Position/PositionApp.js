@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Divider, Tag } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
 import DataTable from '../../components/shared/dataTable'
+
 function PositionApp() {
   const [TabList, setTabList] = useState([]);
   const columns = [

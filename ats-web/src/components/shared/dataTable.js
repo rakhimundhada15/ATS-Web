@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Form, Input, Icon } from 'antd';
+import { Table, Button, Form, Input, Icon } from 'antd/lib';
 import PropTypes from "prop-types";
 
 class DataTable extends React.Component {
@@ -9,42 +9,51 @@ class DataTable extends React.Component {
             dataSource: this.props.dataSource
         };
     }
-    componentDidMount() {
-        // To disable submit button at the beginning.
-        this.props.form.validateFields();
-    }
     onChange = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
+        this.props.onChange(pagination, filters, sorter, extra);
     }
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, value) => {
-            if (!err) {
+            if (!err && value.searchString) {
                 let filterArrayData = [];
-                this.state.dataSource.filter((obj) => {
-                    if ( value.searchString && Object.values(obj).toString().toLocaleLowerCase().includes(value.searchString.toLocaleLowerCase())) {
+                this.props.dataSource.filter((obj) => {
+                    if (Object.values(obj).toString().toLocaleLowerCase().includes(value.searchString.toLocaleLowerCase())) {
                         filterArrayData.push(obj);
                     }
-
                 });
-
                 this.setState({
-                    dataSource: filterArrayData 
+                    dataSource: filterArrayData
                 });
-
+            }
+            else {
+                this.setState({
+                    dataSource: this.props.dataSource
+                });
             }
         });
     };
+
+    showUserModal = () => {
+        this.props.showUserModal(true)
+
+    };
     render() {
-        const {
-            getFieldDecorator
-        } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
 
         return (
             <div className='dataTable'>
-                <Form   layout="inline" onSubmit={this.handleSubmit}>
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                    <Form.Item name="userModelButton" hidden={!this.props.userModelLabel}>
+                        <Button
+                            htmlType="button"
+                            onClick={this.showUserModal}
+                        >
+                            {this.props.userModelLabel}
+                        </Button>
+                    </Form.Item>
                     <Form.Item name="searchString">
-                       {getFieldDecorator("searchString")(
+                        {getFieldDecorator("searchString")(
                             <Input
                                 prefix={<Icon type="search" />}
                                 placeholder="search"
@@ -52,72 +61,17 @@ class DataTable extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" disabled=''>
+                        <Button type="primary" htmlType="submit">
                             Go
                     </Button>
                     </Form.Item>
                 </Form>
-                <Table columns={this.props.columns} dataSource ={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 2 }} />
+                <Table columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 10 }} />
             </div>
         )
     }
+
 }
 
 export default Form.create()(DataTable)
 
-// DataTable.prototype={
-//     columns:PropTypes.objectOf(ColumnProps)
-// }
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Form, Input, Button,Icon ,Table } from 'antd';
-
-// function DataTable(props) {
-//   const [form] = Form.useForm();
-//   const [, forceUpdate] = useState(); // To disable submit button at the beginning.
-
-//   useEffect(() => {
-//     forceUpdate({});
-//   }, []);
-
-//   const onSubmit = values => {
-//     console.log('Finish:', values);
-//   };
-
-//   return (
-//       <div>
-//     <Form form={form} className='dataTable' name="horizontal_login" layout="inline" onSubmit={onSubmit}>
-//       <Form.Item
-//         name="searchString"
-//         rules={[
-//           {
-//             required: true,
-//             message: 'Please input your search String!',
-//           },
-//         ]}
-//       >
-//         <Input prefix={<Icon type="search" />} placeholder="search" />
-//       </Form.Item> 
-//       <Form.Item shouldUpdate>
-//         {() => (
-//           <Button
-//             type="primary"
-//             htmlType="submit"
-//             disabled={
-//               !form.isFieldsTouched(true) ||
-//               form.getFieldsError().filter(({ errors }) => errors.length).length
-//             }
-//           >
-//            Go
-//           </Button>
-//         )}
-//       </Form.Item>
-//     </Form>
-//      <Table columns={props.columns} dataSource={props.dataSource}  pagination={{ pageSize: 2 }} />
-//      </div>
-//   );
-// };
-
-// //export default DataTable;
-// export default Form.create()(DataTable)
