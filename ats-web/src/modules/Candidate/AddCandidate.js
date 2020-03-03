@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import TextInput from './../shared/TextInput';
-import HorizontalTabs from './../shared/HorizontalTabs';
-import ReactLoader from './../shared/loader';
-import FileSelector from './../shared/FileSelector';
-import InputSpinner from './../shared/InputSpinner';
-import { Form, Button } from 'antd';
+import TextInput from './../../components/shared/TextInput';
+import HorizontalTabs from './../../components/shared/HorizontalTabs';
+import ReactLoader from './../../components/shared/loader';
+import FileSelector from './../../components/shared/FileSelector';
+import InputSpinner from './../../components/shared/InputSpinner';
+import { Modal } from 'antd';
 import * as CandidateDetails from './CandidateDetails';
 
 function AddCandidate(props) {
@@ -31,33 +31,44 @@ function AddCandidate(props) {
   const [candidateDetails, setCandidateDetails] = useState(_defaultCandidateDetails);
 
   const resetForm = () => {
-    setCandidateDetails(_defaultCandidateDetails);
+    props.onCloseModal();
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let _candidateDetails = { ...candidateDetails };
-
+    let errorCount = 0;
     Object.keys(_candidateDetails).map(function (key) {
       _candidateDetails = CandidateDetails.validate(_candidateDetails, key, _candidateDetails[key].value.trim());
+      if(_candidateDetails[key].errorMessage){
+        errorCount++;
+      }
     })
     setCandidateDetails(_candidateDetails);
+    if(errorCount==0)
+    props.onCloseModal();
   };
 
   const handleOnChange = e => {
     let _candidateDetails = { ...candidateDetails, [e.target.name]: { "value": e.target.value, "errorMessage": "" } };
-    let m = CandidateDetails.validate(_candidateDetails, e.target.name, e.target.value.trim());
-    setCandidateDetails(m);
+    let candidate_details = CandidateDetails.validate(_candidateDetails, e.target.name, e.target.value.trim());
+    setCandidateDetails(candidate_details);
   }
 
   return (
     <>
-      <div className="ant-row contentHeader">
-        <div className="ant-col-12">
-          Add Candidate
-      </div>
-      </div>
-      <div className="divider"></div>
+    <Modal
+          className="add-candidate-modal"
+          wrapClassName="wrap-add-candidate"
+          title="Add Candidate"
+          centered
+          visible={true}
+          okText="Save"
+          cancelText="Cancel"
+          onOk={(e) =>  handleSubmit(e)}
+          onCancel={(e) => resetForm(e)}
+          width="1000px"
+        >
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
@@ -68,8 +79,6 @@ function AddCandidate(props) {
             value={candidateDetails.emailAddress ? candidateDetails.emailAddress.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.emailAddress ? candidateDetails.emailAddress.errorMessage : ""}
           />
         </div>
@@ -97,8 +106,6 @@ function AddCandidate(props) {
             value={candidateDetails.phoneNumber ? candidateDetails.phoneNumber.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.phoneNumber ? candidateDetails.phoneNumber.errorMessage : ""}
           />
         </div>
@@ -111,8 +118,6 @@ function AddCandidate(props) {
             value={candidateDetails.location ? candidateDetails.location.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.location ? candidateDetails.location.errorMessage : ""}
           />
         </div>
@@ -127,8 +132,6 @@ function AddCandidate(props) {
             value={candidateDetails.firstName ? candidateDetails.firstName.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.firstName ? candidateDetails.firstName.errorMessage : ""}
           />
         </div>
@@ -156,8 +159,6 @@ function AddCandidate(props) {
             value={candidateDetails.middleName ? candidateDetails.middleName.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={false}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.middleName ? candidateDetails.middleName.errorMessage : ""}
           />
         </div>
@@ -170,8 +171,6 @@ function AddCandidate(props) {
             value={candidateDetails.skillSet ? candidateDetails.skillSet.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.skillSet ? candidateDetails.skillSet.errorMessage : ""}
           />
         </div>
@@ -186,8 +185,6 @@ function AddCandidate(props) {
             value={candidateDetails.lastName ? candidateDetails.lastName.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={false}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.lastName ? candidateDetails.lastName.errorMessage : ""}
           />
         </div>
@@ -200,8 +197,6 @@ function AddCandidate(props) {
             value={candidateDetails.referrer ? candidateDetails.referrer.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.referrer ? candidateDetails.referrer.errorMessage : ""}
           />
         </div>
@@ -216,8 +211,6 @@ function AddCandidate(props) {
             value={candidateDetails.source ? candidateDetails.source.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.source ? candidateDetails.source.errorMessage : ""}
           />
         </div>
@@ -230,8 +223,6 @@ function AddCandidate(props) {
             value={candidateDetails.status ? candidateDetails.status.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.status ? candidateDetails.status.errorMessage : ""}
           />
         </div>
@@ -246,8 +237,6 @@ function AddCandidate(props) {
             value={candidateDetails.currentCtc ? candidateDetails.currentCtc.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.currentCtc ? candidateDetails.currentCtc.errorMessage : ""}
           />
         </div>
@@ -260,8 +249,6 @@ function AddCandidate(props) {
             value={candidateDetails.expectedCtc ? candidateDetails.expectedCtc.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.expectedCtc ? candidateDetails.expectedCtc.errorMessage : ""}
           />
         </div>
@@ -276,8 +263,6 @@ function AddCandidate(props) {
             value={candidateDetails.currentOrg ? candidateDetails.currentOrg.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.currentOrg ? candidateDetails.currentOrg.errorMessage : ""}
           />
         </div>
@@ -290,17 +275,11 @@ function AddCandidate(props) {
             value={candidateDetails.noticePeriod ? candidateDetails.noticePeriod.value : ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-12 ant-col-sm-6"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-12 ant-col-sm-14"
             errorMsg={candidateDetails.noticePeriod ? candidateDetails.noticePeriod.errorMessage : ""}
           />
         </div>
       </div>
-      <div className="divider"></div>
-      <div className="ant-row pull-right">
-        <button className="form-btn ant-btn ant-btn-primary" type="submit" onClick={(e) => handleSubmit(e)}>Save</button>
-        <button className="form-btn ant-btn ant-btn-primary" type="button" onClick={(e) => resetForm(e)}>Cancel</button>
-      </div>
+      </Modal>
     </>
   );
 }
