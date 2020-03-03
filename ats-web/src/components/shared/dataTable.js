@@ -34,8 +34,8 @@ class DataTable extends React.Component {
         });
     };
 
-    showUserModal = () => {
-        this.props.showUserModal(true)
+    showModal = () => {
+        this.props.showModal(true)
 
     };
     render() {
@@ -44,12 +44,12 @@ class DataTable extends React.Component {
         return (
             <div className='dataTable'>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <Form.Item name="userModelButton" hidden={!this.props.userModelLabel}>
+                    <Form.Item name="modelButton" hidden={!this.props.modelButtonLabel}>
                         <Button
                             htmlType="button"
-                            onClick={this.showUserModal}
+                            onClick={this.showModal}
                         >
-                            {this.props.userModelLabel}
+                            {this.props.modelButtonLabel}
                         </Button>
                     </Form.Item>
                     <Form.Item name="searchString">
