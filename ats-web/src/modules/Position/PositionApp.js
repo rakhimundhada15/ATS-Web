@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Tag } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
+import AddPosition from './AddPosition';
+
 
 function PositionApp() {
   const [TabList, setTabList] = useState([]);
@@ -88,6 +90,7 @@ function PositionApp() {
   useEffect(() => {
     let tab_list = [];
     tab_list.push({ "title": "Open Positions", "URL": <Table columns={columns} dataSource={data} /> });
+    tab_list.push({ "title": "Add Position", "URL": <AddPosition /> });
     setTabList(tab_list)
   }, []);
 
