@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 import modules from './modules';
-import 'antd/dist/antd.css';
 import './index.css';
 import { Layout, Menu, Icon } from 'antd';
 
