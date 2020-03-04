@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Table, Divider, Tag } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
 import AddPosition from './AddPosition';
-
+import { Button } from 'antd';
 
 function PositionApp() {
   const [TabList, setTabList] = useState([]);
+  const [showAddPosition, setShowAddPosition] = useState(false);
+
+  const closeModal = () => {
+    setShowAddPosition(false);
+  }
+
   const columns = [
     {
       title: 'Title',
@@ -90,12 +96,19 @@ function PositionApp() {
   useEffect(() => {
     let tab_list = [];
     tab_list.push({ "title": "Open Positions", "URL": <Table columns={columns} dataSource={data} /> });
-    tab_list.push({ "title": "Add Position", "URL": <AddPosition /> });
     setTabList(tab_list)
   }, []);
 
   return (
+    
+<div>
+    <Button type="primary" onClick={() => setShowAddPosition(true)}>
+    Add Position
+    </Button>
+    <hr></hr>
     <HorizontalTabs tabList={TabList} />
+    {showAddPosition? <AddPosition onCloseModal={closeModal} />: null}
+    </div>
   );
 }
 
