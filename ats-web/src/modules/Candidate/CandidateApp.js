@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import AddCandidate from '../Candidate/AddCandidate';
-import { Button, Table } from 'antd';
 import * as CandidateApi from '../../api/candidateApi';
 import DataTable from '../../components/shared/dataTable'
+import CandidateInfo from './CandidateInfo';
+import { Button } from 'antd';
 
 function CandidateApp() {
   const [showAddCandidate, setShowAddCandidate] = useState(false);
@@ -54,7 +55,7 @@ function CandidateApp() {
 
   return (
     <>
-    {showAddCandidate? <AddCandidate onCloseModal={closeModal} selectedCandidate={selectedCandidate}/>: null}
+    {/* {showAddCandidate? <CandidateInfo /> <AddCandidate onCloseModal={closeModal} selectedCandidate={selectedCandidate}/>: null} */}
     <DataTable columns={columns} 
             dataSource={listOfCandidate} 
             modelButtonLabel="Add Candidate" 
