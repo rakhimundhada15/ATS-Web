@@ -1,0 +1,17 @@
+.row1{
+     margin: 30px;  
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn1{
+    margin-right: 10px;
+    width: 70px;
+    float: right;
+}
+
+.btn2{
+    float: right;
+    width: 70px;
+    margin-right: 10px;
+}
