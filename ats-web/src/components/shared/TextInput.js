@@ -7,14 +7,14 @@ function TextInput(props) {
     return (
         <div className={props.errorMsg ? props.containerErrorClass : props.containerClass}>
             <div className={props.labelWrapperClass}>
-                <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass : ""}>
+                <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass : "ant-form-item"}>
                     {props.label}
                 </label>
             </div>
             <div className={props.fieldContainerClass}>
                 <div className={props.fieldWrapperClass}>
                     <span className={props.fieldClass}>
-                        <input type="text" id={props.id} name={props.name} className={props.inputControlClass}   />
+                        <input type="text" id={props.id} name={props.name} className={props.inputControlClass} onChange={props.onChange} value={props.value}  />
                     </span>
                     { props.errorMsg && (<div className="ant-form-explain">
                             {props.errorMsg }
