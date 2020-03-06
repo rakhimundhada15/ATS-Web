@@ -3,6 +3,8 @@ import { Table, Divider, Tag } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
 import AddPosition from './AddPosition';
 import { Button } from 'antd';
+import DataTable from '../../components/shared/dataTable'
+
 
 function PositionApp() {
   const [TabList, setTabList] = useState([]);
@@ -95,7 +97,7 @@ function PositionApp() {
   ];
   useEffect(() => {
     let tab_list = [];
-    tab_list.push({ "title": "Open Positions", "URL": <Table columns={columns} dataSource={data} /> });
+    tab_list.push({ "title": "Open Positions", "URL": <DataTable columns={columns} dataSource={data} /> });
     setTabList(tab_list)
   }, []);
 
