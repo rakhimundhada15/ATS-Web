@@ -73,10 +73,12 @@ class DataTable extends React.Component {
                     </div>
                 </Form>
                 <Table rowKey={this.props.rowKey} columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 10 }} />
+
             </div>
         )
     }
 
 }
+
 
 export default Form.create()(DataTable)

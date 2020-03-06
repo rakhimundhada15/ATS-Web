@@ -3,6 +3,9 @@ import AddCandidate from '../Candidate/AddCandidate';
 import Details from '../Candidate/Details';
 import * as CandidateApi from '../../api/candidateApi';
 import DataTable from '../../components/shared/dataTable'
+import CandidateInfo from './CandidateInfo';
+import AssociatedPosition from './AssociatedPosition';
+import { Button } from 'antd';
 
 
 function CandidateApp() {
@@ -18,7 +21,6 @@ function CandidateApp() {
     setListOfCandidate(CandidateApi.getCandidates());
     setShowAddCandidate(false);
   }
-
 
   const handleClick = (candidateId)=>{
     setShowAddCandidate(false);
@@ -52,7 +54,14 @@ function CandidateApp() {
       key: 'mobileNumber',
     },
   ];
-
+  // useEffect(() => {
+  //   let tab_list = [];
+  //   tab_list.push({ "title": "Candidates", "URL": <TestComponent tabDetails="CandidatesDetails" numberOfRows={2} /> });
+  //   tab_list.push({ "title": "Candidate Details", "URL": <CandidateInfo /> });
+  //   tab_list.push({ "title": "Associated Positions", "URL": <AssociatedPosition /> });
+  //   tab_list.push({ "title": "Feedback", "URL": <TestComponent tabDetails="Feedback" numberOfRows={5} /> });
+  //   setTabList(tab_list)
+  // }, []);
 
   return (
     <>
