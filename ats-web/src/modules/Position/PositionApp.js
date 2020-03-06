@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Divider, Tag, Popconfirm } from 'antd';
-import HorizontalTabs from '../../components/shared/HorizontalTabs';
-import DataTable from '../../components/shared/dataTable'
+import { Divider, Tag } from 'antd';
 import AddPosition from './AddPosition';
 import { Button } from 'antd';
-import Delete from './Popconfirm';
-import '../../styles/shared.css';
-import * as CandidateApi from '../../api/candidateApi';
-
-
-
-
-function PositionApp(props) {
-  function onDelete(key) {
-    console.log("hi");
-  }
+import DataTable from '../../components/shared/dataTable';
+import * as positionApi from '../../api/positionApi';
 
   const deletePosition = (del) => {
     //TO DO: Call API to delete position
     console.log(del.key);
   }
 
-  const [TabList, setTabList] = useState([]);
+function PositionApp() {
+  const [positions, setPositions] = useState([]);
   const [showAddPosition, setShowAddPosition] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
 
   const closeModal = () => {
     setShowAddPosition(false);
@@ -37,89 +28,44 @@ function PositionApp(props) {
     },
     {
       title: 'Required Experience',
-      dataIndex: 'reqExp',
-      key: 'reqExp',
+      dataIndex: 'experience',
+      key: 'experience',
     },
     {
-      title: 'No. of Position',
-      dataIndex: 'noOfPosition',
-      key: 'noOfPosition',
-    },
-    {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
+      title: 'No. of Positions',
+      dataIndex: 'no_of_openings',
+      key: 'no_of_openings',
     },
     {
       title: 'Action',
-      key: 'key',
-      render: (del) => <Delete onYes={deletePosition} item={del} />
+      key: 'action',
+      render: (text, record) => (
+        <span>
+          <a>Edit</a>
+          <Divider type="vertical" />
+          <a>Delete</a>
+        </span>
+      ),
     },
   ];
-
-  const data = [
-    {
-      key: '1',
-      title: 'Java Developer',
-      reqExp: '5-10',
-      noOfPosition: 10,
-      location: 'Niyuj HQ',
-      tags: ['urgent'],
-    },
-    {
-      key: '2',
-      title: 'Web Developer',
-      reqExp: '6-10',
-      noOfPosition: 2,
-      location: 'Niyuj Sat',
-      tags: ['full stack'],
-    },
-    {
-      key: '3',
-      title: 'C++ Developer',
-      reqExp: '7-10',
-      noOfPosition: 7,
-      location: 'Niyuj HQ',
-      tags: [],
-    },
-  ];
-
-
   useEffect(() => {
-    let tab_list = [];
-    tab_list.push({ "title": "Open Positions", "URL": <DataTable columns={columns} dataSource={data} /> });
-    setTabList(tab_list)
+    async function fetchPositions() {
+      const _positions = await positionApi.getPositions();
+      setPositions(_positions);
+      setisLoading(false);
+    }
+    fetchPositions();
   }, []);
 
   return (
-    
-<div>
-    <Button type="primary" onClick={() => setShowAddPosition(true)}>
-    Add Position
-    </Button>
-    <hr></hr>
-    <HorizontalTabs tabList={TabList} />
-    {showAddPosition? <AddPosition onCloseModal={closeModal} />: null}
+
+    <div>
+      <Button type="primary" onClick={() => setShowAddPosition(true)}>
+        Add Position
+      </Button>
+      <hr></hr>
+      {!isLoading && <DataTable columns={columns} dataSource={positions}  />}
+      {showAddPosition ? <AddPosition onCloseModal={closeModal} /> : null}
     </div>
   );
 }
