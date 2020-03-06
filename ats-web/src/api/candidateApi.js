@@ -1,5 +1,5 @@
 import { handleResponse, handleError } from "./apiUtils";
-const baseUrl = process.env.REACT_APP_API_URL + "/candidates/";
+const baseUrl = "http://13.233.58.211:6000/candidates/";
 
 export function getCandidates() {
   return fetch(baseUrl)
@@ -8,24 +8,13 @@ export function getCandidates() {
 }
 
 export async function getCandidate(id) {
-  return {
-    emailAddress: "abc123@niyuj.com" ,
-    phoneNumber: "98********",
-    location:  "EastUS",
-    firstName:  "abc",
-    experience: "5",
-    middleName: "def",
-    skillSet: "algorithms",
-    lastName:  "xyz",
-    referrer: "pqr",
-};
-  // try {
-  //   let handleResponse = await fetch(baseUrl + "/id");
-  //   return handleResponse(handleResponse);
-  // }
-  // catch (handleError) {
-  //   return handleError(handleError);
-  // }
+  try {
+    let handleRes = await fetch(baseUrl + "/" + id);
+    return handleResponse(handleRes);
+  }
+  catch (handleErr) {
+    return handleError(handleErr);
+  }
 }
 
 export function saveCandidate(candidate) {
