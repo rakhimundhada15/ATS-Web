@@ -5,7 +5,7 @@ import DefaultProps from '../common/defaultProps';
 
 class InputSpinner extends React.Component {
   state = {
-    number: this.props.min,
+    number: this.props.value ? this.props.value : this.props.min,
     error: false
   };
   handleChange = (e) => {
@@ -17,22 +17,35 @@ class InputSpinner extends React.Component {
   };
   render() {
     return (
-      <div className={this.state.error ? this.props.containerErrorClass : this.props.containerClass }>
-        <label htmlFor={this.props.id} className={this.props.isRequired ? this.props.requiredLabelClass : this.props.labelClass}>{this.props.label}</label>
-        <div className={this.props.controlClass}>
-          <input
-            name={this.props.name}
-            min={this.props.min}
-            max={this.props.max ? this.props.max : 10}
-            value={this.state.number}
-            type='number'
-            onChange={this.handleChange}
-          />
-          {this.state.error && (
-            <span className="help-block">{this.props.errorMsg}</span>
-          )}
+      <div className={this.props.errorMsg ? this.props.containerErrorClass : this.props.containerClass}>
+        <div className={this.props.labelWrapperClass}>
+          <label htmlFor={this.props.id} className={this.props.isRequired ? this.props.requiredLabelClass : "ant-form-item"}>
+            {this.props.label}
+          </label>
+        </div>
+        <div className={this.props.fieldContainerClass}>
+          <div className={this.props.fieldWrapperClass}>
+            <span className={this.props.fieldClass}>
+
+              <input
+                name={this.props.name}
+                min={this.props.min}
+                max={this.props.max ? this.props.max : 10}
+                value={this.state.number}
+                type='number'
+                onChange={this.handleChange}
+                className={this.props.inputControlClass}
+              />
+
+            </span>
+            {this.props.errorMsg && (<div className="ant-form-explain">
+              {this.props.errorMsg}
+            </div>)
+            }
+          </div>
         </div>
       </div>
+
     );
   }
 }

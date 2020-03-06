@@ -1,7 +1,7 @@
 const candidateList = [
     {
-        "id": 1,
-        "firstName": "Candidate xyz",
+        "id": 9,
+        "name": "Candidate xyz",
         "email": "candidate1@xyz.com",
         "skills": [
           "Java",
@@ -9,19 +9,19 @@ const candidateList = [
         ],
         "experience": 3,
         "address": "Baner,Pune",
-        "mobileNumber": 9089989890,
+        "mobileno": 9089989890,
         "source": "referral",
         "resume": "resume.pdf",
         "status": "shortlisted",
-        "currentCtc": 4.5,
-        "expectedCtc": 6,
-        "currentOrganisation": "xyz",
-        "noticePeriod": "15 days",
-        "referrer": "employee2"
+        "current_ctc": 4.5,
+        "expected_ctc": 6,
+        "current_organization": "xyz",
+        "notice_period": "15 days",
+        "reffered_by": "employee2"
     },
     {
         "id": 2,
-        "firstName": "Candidate abc",
+        "name": "Candidate abc",
         "email": "candidate2@abc.com",
         "skills": [
           "c#",
@@ -29,15 +29,15 @@ const candidateList = [
         ],
         "experience": 6,
         "address": "Baner,Pune",
-        "mobileNumber": 8987675645,
+        "mobileno": 8987675645,
         "source": "referral",
         "resume": "resume.pdf",
         "status": "shortlisted",
-        "currentCtc": 10,
-        "expectedCtc": 13,
-        "currentOrganisation": "ABC",
-        "noticePeriod": "45 days",
-        "referrer": "employee1"
+        "current_ctc": 10,
+        "expected_ctc": 13,
+        "current_organization": "ABC",
+        "notice_period": "45 days",
+        "reffered_by": "employee1"
     },
 ];
 

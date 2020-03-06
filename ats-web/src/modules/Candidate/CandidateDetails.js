@@ -1,7 +1,7 @@
 import * as resources from '../../components/common/resources';
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneNoRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-const nameRegex = /^[A-Za-z ]+$/;
+const nameRegex = /^[A-Za-z' ]+$/;
 const errorMessages = resources.errorMessages();
 
 export const validate = (candidateDetailErrors, elementName, elementValue) => {
@@ -11,33 +11,28 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
         case "email":
             error = validateEmail(elementValue);
             break;
-        case "mobileNumber":
+        case "mobileno":
             error = validatePhoneNumber(elementValue);
             break;
-        case "firstName":
-            error = validateFirstName(elementValue);
-            break;
-        case "middleName":
-        case "lastName":
+        case "name":
             error = validateName(elementValue);
             break;
         case "source":
-        case "referrer":
+        case "reffered_by":
         case "location":
         case "status":
-        case "currentOrganisation":
-        case "noticePeriod":
+        case "current_organization":
+        case "notice_period":
             error = validateRequiredFields(elementValue);
             break;
-        case "currentCtc":
-        case "expectedCtc":
+        case "current_ctc":
+        case "expected_ctc":
             error = validateCtc(elementValue);
             break;
         case "skills":
             error = validateSkills(elementValue);
             break;
     }
-    // console.log(elementName, elementValue, error);
     if (error) {
         candidateDetailErrors[elementName] = error;
      }else{
@@ -56,26 +51,20 @@ const validateEmail = (email) => {
     }
 }
 
-const validatePhoneNumber = (mobileNumber) => {
-    if (!mobileNumber || mobileNumber === "") {
+const validatePhoneNumber = (mobileno) => {
+    if (!mobileno || mobileno === "") {
         return errorMessages.requiredFieldError;
     }
-    if (!phoneNoRegex.test(mobileNumber)) {
+    if (!phoneNoRegex.test(mobileno)) {
         return errorMessages.invalidPhoneNumberError;
     }
 }
 
-const validateFirstName = (firstName) => {
-    if (!firstName || firstName === "") {
+const validateName = (name) => {
+    if (!name || name === "") {
         return errorMessages.requiredFieldError;
     }
-    if (!nameRegex.test(firstName)) {
-        return errorMessages.invalidNameError;
-    }
-}
-
-const validateName = (name) => {
-    if (name && name !== "" && !nameRegex.test(name)) {
+    if (!nameRegex.test(name)) {
         return errorMessages.invalidNameError;
     }
 }
@@ -95,8 +84,6 @@ const validateCtc = (ctc) => {
 }
 
 const validateSkills = (skills) => {
-    console.log(skills);
-    console.log(skills.toString());
     if(skills.length === 0){
         return errorMessages.requiredFieldError;
     }

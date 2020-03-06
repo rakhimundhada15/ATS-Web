@@ -2,8 +2,16 @@ import { handleResponse, handleError } from "./apiUtils";
 import * as CandidateService from '../services/candidates';
 const baseUrl = "http://13.233.58.211:6000/candidates/";
 
-export function getCandidates() {
- return CandidateService.getCandidateToList();
+export async function getCandidates() {
+  try {
+    let handleRes = await fetch(baseUrl + "/all");
+    return handleResponse(handleRes);
+  }
+  catch (handleErr) {
+    return handleError(handleErr);
+  }
+
+// return CandidateService.getCandidateToList();
   // return fetch(baseUrl)
   //   .then(handleResponse)
   //   .catch(handleError);
