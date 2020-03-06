@@ -23,14 +23,12 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
         case "status":
         case "current_organization":
         case "notice_period":
+        case "skills":
             error = validateRequiredFields(elementValue);
             break;
         case "current_ctc":
         case "expected_ctc":
             error = validateCtc(elementValue);
-            break;
-        case "skills":
-            error = validateSkills(elementValue);
             break;
     }
     if (error) {
@@ -80,11 +78,5 @@ const validateCtc = (ctc) => {
     }
     if (isNaN(ctc) || ctc < 0) {
         return errorMessages.invalidCtcError;
-    }
-}
-
-const validateSkills = (skills) => {
-    if(skills.length === 0){
-        return errorMessages.requiredFieldError;
     }
 }

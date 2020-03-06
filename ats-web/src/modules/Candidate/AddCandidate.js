@@ -15,7 +15,7 @@ let _defaultCandidateDetails = {
   address: "",
   name: "",
   middleName: "",
-  skills: [],
+  skills: "",
   lastName: "",
   reffered_by: "",
   source: "",
@@ -30,12 +30,12 @@ let _defaultCandidateDetails = {
 function AddCandidate(props) {
   document.title = 'Add Candidate';
     
-  const [candidateDetails, setCandidateDetails] = useState({});
-  const [candidateDetailErrors, setCandidateDetailErrors] = useState(_defaultCandidateDetails);
+  const [candidateDetails, setCandidateDetails] = useState(_defaultCandidateDetails);
+  const [candidateDetailErrors, setCandidateDetailErrors] = useState({});
 
   useEffect(() => {
     if(props.selectedCandidateDetails){
-      const _defaultCandidateDetails = props.selectedCandidateDetails;
+       _defaultCandidateDetails = props.selectedCandidateDetails;
       setCandidateDetails(_defaultCandidateDetails);
     }
 }, [])  
@@ -52,10 +52,9 @@ function AddCandidate(props) {
     Object.keys(_candidateDetails).map(function (key) {
       _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, key, _candidateDetails[key]);
     })
-    
     setCandidateDetailErrors(_candidateDetailErrors);
     if(Object.entries(_candidateDetailErrors).length === 0){
-      _candidateDetails.skills = _candidateDetails.skills.toString().split(',');
+      _candidateDetails.skills = _candidateDetails.skills;
       setCandidateDetails(_candidateDetails);
       CandidateApi.saveCandidate(_candidateDetails);
       props.onCloseModal();
@@ -178,7 +177,7 @@ function AddCandidate(props) {
               label="Skill Set:"
               labelclassName=""
               name="skills"
-              value={candidateDetails.skills ? candidateDetails.skills.toString() : ""}
+              value={candidateDetails.skills ? candidateDetails.skills : ""}
               onChange={(e) => handleOnChange(e)}
               isRequired={true}
               errorMsg={candidateDetailErrors.skills ? candidateDetailErrors.skills : ""}
