@@ -25,7 +25,7 @@ export default function CandidateDetails(props) {
         {showEditCandidate ? <AddCandidate onCloseModal={toggleEditPopup} selectedCandidateDetails={details}/>: null}
 
             <div className="ant-row">
-                <Button className="btn" type="primary">Edit</Button>
+                <Button className="btn" type="primary" onClick={toggleEditPopup}>Edit</Button>
             </div>
             <div className="ant-row ant-col-24">
                 <div className="ant-col ant-form-item-label ant-col-6">

@@ -20,7 +20,7 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Layout  >
+        <Layout style={{height:'100%'}}>
           <Sider width={'224px'} trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo" />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentTab]}>
@@ -51,7 +51,7 @@ class App extends React.Component {
                 ))}
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Resource Recruitment Planning ©{new Date().getFullYear()} Created by Niyuj Enterprises</Footer>
+            {/* <Footer style={{ textAlign: 'center' }}>Resource Recruitment Planning ©{new Date().getFullYear()} Created by Niyuj Enterprises</Footer> */}
           </Layout>
         </Layout>
       </Router>
