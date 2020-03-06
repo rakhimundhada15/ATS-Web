@@ -18,6 +18,12 @@ function PositionApp(props) {
   }
 
   const [TabList, setTabList] = useState([]);
+  const [showAddPosition, setShowAddPosition] = useState(false);
+
+  const closeModal = () => {
+    setShowAddPosition(false);
+  }
+
   const columns = [
     {
       title: 'Title',
@@ -97,12 +103,20 @@ function PositionApp(props) {
 
   useEffect(() => {
     let tab_list = [];
-    tab_list.push({ "title": "Open Positions", "URL": <Table id="mytableofrows" className="ant-col-24" columns={columns} dataSource={data} /> });
+    tab_list.push({ "title": "Open Positions", "URL": <DataTable columns={columns} dataSource={data} /> });
     setTabList(tab_list)
   }, []);
 
   return (
+    
+<div>
+    <Button type="primary" onClick={() => setShowAddPosition(true)}>
+    Add Position
+    </Button>
+    <hr></hr>
     <HorizontalTabs tabList={TabList} />
+    {showAddPosition? <AddPosition onCloseModal={closeModal} />: null}
+    </div>
   );
 }
 
