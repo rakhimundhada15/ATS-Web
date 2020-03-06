@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CandidateInfo.css';
-import { Button } from 'antd';
+import {Button} from 'antd';
 import * as candidatesAPI from "../../api/candidateApi";
 import AddCandidate from "./AddCandidate";
 
@@ -25,117 +25,116 @@ export default function CandidateDetails(props) {
         {showEditCandidate ? <AddCandidate onCloseModal={toggleEditPopup} selectedCandidateDetails={details}/>: null}
 
             <div className="ant-row">
-                <Button className="btn" type="primary">Delete</Button>
-                <Button className="btn" type="primary" onClick={setShowEditCandidate}>Edit</Button>
+                <Button className="btn" type="primary">Edit</Button>
             </div>
             <div className="ant-row ant-col-24">
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">
-                        Email:
+                        Email
                     </label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.email}]</label>
+                    <label className="ant-form-item">{details && details.email}</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Name:</label>
+                    <label className="ant-form-item">Name</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.name}]</label>
+                    <label className="ant-form-item">{details && details.name}</label>
                 </div>
             </div>
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Phone No.:</label>
+                    <label className="ant-form-item">Phone No</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.mobileno}]</label>
+                    <label className="ant-form-item">{details && details.mobileno}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Address:</label>
+                    <label className="ant-form-item">Address</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.address}]</label>
-                </div>
-            </div>
-
-            <div className="ant-row ant-col-24 row1">
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Resume:</label>
-                </div>
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <a href="abc.txt">[{details && details.resume}]</a>
-                </div>
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Experience (yrs):</label>
-                </div>
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.experience}]</label>
+                    <label className="ant-form-item">{details && details.address}</label>
                 </div>
             </div>
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Current Organisation:</label>
+                    <label className="ant-form-item">Resume</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.current_organization}]</label>
-                </div>
-
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Skillset:</label>
+                    <label className="ant-form-item"><a href="abc.txt">{details && details.resume}</a></label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.skills}]</label>
-                </div>
-            </div>
-
-            <div className="ant-row ant-col-24 row1">
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Expected Ctc:</label>
+                    <label className="ant-form-item">Experience (yrs)</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.expected_ctc}]</label>
-                </div>
-
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Current Ctc:</label>
-                </div>
-                <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.current_ctc}]</label>
+                    <label className="ant-form-item">{details && details.experience}</label>
                 </div>
             </div>
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Notice Period:</label>
+                    <label className="ant-form-item">Current Organisation:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.notice_period}]</label>
+                    <label className="ant-form-item">{details && details.current_organization}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Referred By:</label>
+                    <label className="ant-form-item">Skillset</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.reffered_by}]</label>
+                    <label className="ant-form-item">{details && details.skills}</label>
                 </div>
             </div>
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Source:</label>
+                    <label className="ant-form-item">Expected Ctc</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.source}]</label>
+                    <label className="ant-form-item">{details && details.expected_ctc}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>Status:</label>
+                    <label className="ant-form-item">Current Ctc</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label>[{details && details.status}]</label>
+                    <label className="ant-form-item">{details && details.current_ctc}</label>
+                </div>
+            </div>
+
+            <div className="ant-row ant-col-24 row1">
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">Notice Period</label>
+                </div>
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">{details && details.notice_period}</label>
+                </div>
+
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">Referred By</label>
+                </div>
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">{details && details.reffered_by}</label>
+                </div>
+            </div>
+
+            <div className="ant-row ant-col-24 row1">
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">Source</label>
+                </div>
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">{details && details.source}</label>
+                </div>
+
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">Status</label>
+                </div>
+                <div className="ant-col ant-form-item-label ant-col-6">
+                    <label className="ant-form-item">{details && details.status}</label>
                 </div>
             </div>
         </>
