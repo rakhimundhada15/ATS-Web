@@ -76,3 +76,7 @@ label.ant-form-item::after{
 .pull-right{
     text-align: right;
 }
+/* .table-del { display:none;} */
+/* Table tr:hover .table-del {display:inline-block;} */
+/* Table#mytableofrows  .cls { display:none;} */
+/* span#mytableofrows columns:hover  .cls { display:inline-block;} */
