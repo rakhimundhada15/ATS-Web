@@ -8,7 +8,7 @@ export default function CandidateDetails(props) {
 
     useEffect(() => {
         async function fetchDetails() {
-            const _details =  await candidatesAPI.getCandidate(props.id);
+            const _details =  await candidatesAPI.getCandidateById(props.id);
             setDetails(_details);
         }
         fetchDetails();

@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import AddCandidate from '../Candidate/AddCandidate';
+import Details from '../Candidate/Details';
 import * as CandidateApi from '../../api/candidateApi';
 import DataTable from '../../components/shared/dataTable'
-import CandidateInfo from './CandidateInfo';
-import { Button } from 'antd';
+
 
 function CandidateApp() {
   const [showAddCandidate, setShowAddCandidate] = useState(false);
-  const [selectedCandidate, setSelectedCandidate] = useState("");
+  const [selectedCandidateId, setSelectedCandidateId] = useState("");
   const [listOfCandidate, setListOfCandidate] = useState(CandidateApi.getCandidates());
 
   const showModal = () => {
     setShowAddCandidate(true);
   }
   const closeModal = () => {
-    setSelectedCandidate("");
+    setSelectedCandidateId("");
     setListOfCandidate(CandidateApi.getCandidates());
     setShowAddCandidate(false);
   }
 
+
   const handleClick = (candidateId)=>{
-    setShowAddCandidate(true);
-    setSelectedCandidate(candidateId);
+    setShowAddCandidate(false);
+    setSelectedCandidateId(candidateId);
   }
   const columns = [
     {
@@ -55,12 +56,17 @@ function CandidateApp() {
 
   return (
     <>
-    {/* {showAddCandidate? <CandidateInfo /> <AddCandidate onCloseModal={closeModal} selectedCandidate={selectedCandidate}/>: null} */}
-    <DataTable columns={columns} 
-            dataSource={listOfCandidate} 
-            modelButtonLabel="Add Candidate" 
-            showModal={showModal}
-            rowKey='id' /> 
+    {selectedCandidateId ? <Details selectedCandidateId={selectedCandidateId}/> : 
+      <>
+      {showAddCandidate ? <AddCandidate onCloseModal={closeModal} selectedCandidateId={selectedCandidateId}/>: null}
+    
+      <DataTable columns={columns} 
+              dataSource={listOfCandidate} 
+              modelButtonLabel="Add Candidate" 
+              showModal={showModal}
+              rowKey='id' /> 
+              </>
+    }
     </>
   );
 }
