@@ -1,37 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import TestComponent from '../../TestComponent'
-import HorizontalTabs from '../../components/shared/HorizontalTabs';
 import AddCandidate from '../Candidate/AddCandidate';
-import CandidateInfo from './CandidateInfo';
-import AssociatedPosition from './AssociatedPosition';
-import { Button } from 'antd';
+import Details from '../Candidate/Details';
+import * as CandidateApi from '../../api/candidateApi';
+import DataTable from '../../components/shared/dataTable'
 
 function CandidateApp() {
-  const [TabList, setTabList] = useState([]);
   const [showAddCandidate, setShowAddCandidate] = useState(false);
+  const [selectedCandidateId, setSelectedCandidateId] = useState("");
+  const [listOfCandidates, setListOfCandidates] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
 
+    useEffect(() => {
+        async function fetchDetails() {
+            const _details = await CandidateApi.getCandidates();
+            setListOfCandidates(_details);
+            setisLoading(false);
+        }
+        fetchDetails();
+    }, [])
+    
+  const showModal = () => {
+    setShowAddCandidate(true);
+  }
   const closeModal = () => {
+    setSelectedCandidateId("");
+    // setListOfCandidates(CandidateApi.getCandidates());
     setShowAddCandidate(false);
   }
 
-
-  useEffect(() => {
-    let tab_list = [];
-    tab_list.push({ "title": "Candidates", "URL": <TestComponent tabDetails="CandidatesDetails" numberOfRows={2} /> });
-    tab_list.push({ "title": "Candidate Details", "URL": <CandidateInfo /> });
-    tab_list.push({ "title": "Associated Positions", "URL": <AssociatedPosition /> });
-    tab_list.push({ "title": "Feedback", "URL": <TestComponent tabDetails="Feedback" numberOfRows={5} /> });
-    setTabList(tab_list)
-  }, []);
+  const handleClick = (candidateId)=>{
+    setShowAddCandidate(false);
+    setSelectedCandidateId(candidateId);
+  }
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',     
+      render: (text, record) => (
+        <span>
+          <a onClick={() => handleClick(record.id)}>{text}</a>
+        </span>
+      )
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      
+    },
+    {
+      title: 'Experience',
+      dataIndex: 'experience',
+      key: 'experience',
+    },
+    {
+      title: 'Mobile Number',
+      dataIndex: 'mobileno',
+      key: 'mobileno',
+    },
+  ];
 
   return (
     <>
-    <Button type="primary" onClick={() => setShowAddCandidate(true)}>
-        Add Candidate
-    </Button>
-    <hr></hr>
-    <HorizontalTabs tabList={TabList} />
-    {showAddCandidate? <AddCandidate onCloseModal={closeModal} />: null}
+    {selectedCandidateId ? <Details selectedCandidateId={selectedCandidateId}/> : 
+      <>
+      {showAddCandidate ? <AddCandidate onCloseModal={closeModal} />: null}
+      {!isLoading && <DataTable columns={columns} 
+              dataSource={listOfCandidates} 
+              modelButtonLabel="Add Candidate" 
+              showModal={showModal}
+              rowKey='id' /> }
+              </>
+    }
     </>
   );
 }

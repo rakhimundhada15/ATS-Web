@@ -17,11 +17,10 @@ class App extends React.Component {
       collapsed: !this.state.collapsed,
     });
   };
-
   render() {
     return (
       <Router>
-        <Layout style={{height: '100%'}}>
+        <Layout  >
           <Sider width={'224px'} trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo" />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentTab]}>

@@ -1,47 +1,45 @@
 import * as resources from '../../components/common/resources';
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneNoRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-const nameRegex = /^[A-Za-z]+$/;
+const nameRegex = /^[A-Za-z' ]+$/;
 const errorMessages = resources.errorMessages();
 
-export const validate = (candidateDetails, elementName, elementValue) => {
+export const validate = (candidateDetailErrors, elementName, elementValue) => {
     let error = null;
+    elementValue = typeof(elementValue) === "string" ? elementValue.trim() : elementValue;
     switch (elementName) {
-        case "emailAddress":
+        case "email":
             error = validateEmail(elementValue);
             break;
-        case "phoneNumber":
+        case "mobileno":
             error = validatePhoneNumber(elementValue);
             break;
-        case "firstName":
-            error = validateFirstName(elementValue);
-            break;
-        case "middleName":
-        case "lastName":
+        case "name":
             error = validateName(elementValue);
             break;
         case "source":
-        case "skillSet":
-        case "referrer":
+        case "reffered_by":
         case "location":
         case "status":
-        case "currentOrg":
-        case "noticePeriod":
+        case "current_organization":
+        case "notice_period":
+        case "skills":
             error = validateRequiredFields(elementValue);
             break;
-        case "currentCtc":
-        case "expectedCtc":
+        case "current_ctc":
+        case "expected_ctc":
             error = validateCtc(elementValue);
             break;
     }
     if (error) {
-        candidateDetails[elementName].errorMessage = error;
-    }
-    return candidateDetails;
+        candidateDetailErrors[elementName] = error;
+     }else{
+         delete candidateDetailErrors[elementName];
+     }
+    return candidateDetailErrors;
 }
 
 const validateEmail = (email) => {
-    console.log(email);
     if (!email || email === "") {
         return errorMessages.requiredFieldError;
     }
@@ -51,27 +49,20 @@ const validateEmail = (email) => {
     }
 }
 
-const validatePhoneNumber = (phoneNumber) => {
-    if (!phoneNumber || phoneNumber === "") {
+const validatePhoneNumber = (mobileno) => {
+    if (!mobileno || mobileno === "") {
         return errorMessages.requiredFieldError;
     }
-    if (!phoneNoRegex.test(phoneNumber)) {
+    if (!phoneNoRegex.test(mobileno)) {
         return errorMessages.invalidPhoneNumberError;
     }
 }
 
-const validateFirstName = (firstName) => {
-    if (!firstName || firstName === "") {
+const validateName = (name) => {
+    if (!name || name === "") {
         return errorMessages.requiredFieldError;
     }
-    console.log(nameRegex.test(firstName));
-    if (!nameRegex.test(firstName)) {
-        return errorMessages.invalidNameError;
-    }
-}
-
-const validateName = (name) => {
-    if (name && name !== "" && !nameRegex.test(name)) {
+    if (!nameRegex.test(name)) {
         return errorMessages.invalidNameError;
     }
 }

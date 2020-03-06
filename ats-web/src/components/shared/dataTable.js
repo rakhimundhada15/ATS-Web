@@ -44,34 +44,44 @@ class DataTable extends React.Component {
         return (
             <div className='dataTable'>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <Form.Item name="modelButton" hidden={!this.props.modelButtonLabel}>
-                        <Button
-                            htmlType="button"
-                            onClick={this.showModal}
-                        >
-                            {this.props.modelButtonLabel}
-                        </Button>
-                    </Form.Item>
-                    <Form.Item name="searchString">
-                        {getFieldDecorator("searchString")(
-                            <Input
-                                prefix={<Icon type="search" />}
-                                placeholder="search"
-                            />
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Go
-                    </Button>
-                    </Form.Item>
+                    <div className="ant-row">
+                        { this.props.modelButtonLabel && 
+                            <div className="ant-col-12">
+                                <Form.Item name="modelButton" hidden={!this.props.modelButtonLabel}>
+                                    <Button
+                                        htmlType="button"
+                                        onClick={this.showModal}
+                                        type="primary"
+                                    >
+                                        {this.props.modelButtonLabel}
+                                    </Button>
+                                </Form.Item>
+                            </div>
+                        }
+                        <div className= { this.props.modelButtonLabel ? "ant-col-12 pull-right" :"ant-col-24 pull-right"  }>
+                            <Form.Item name="searchString">
+                                {getFieldDecorator("searchString")(
+                                    <Input
+                                        prefix={<Icon type="search" />}
+                                        placeholder="search"
+                                    />
+                                )}
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Go
+                                </Button>
+                            </Form.Item>
+                        </div>
+                    </div>
                 </Form>
-                <Table columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 10 }} />
+                <Table rowKey={this.props.rowKey} columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 10 }} />
+
             </div>
         )
     }
 
 }
 
-export default Form.create()(DataTable)
 
+export default Form.create()(DataTable)
