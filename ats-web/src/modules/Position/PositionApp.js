@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag, Popconfirm } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
-import AddPosition from './AddPosition';
-import { Button } from 'antd';
-import DataTable from '../../components/shared/dataTable'
+import Delete from './Popconfirm';
+import '../../styles/shared.css';
+import * as CandidateApi from '../../api/candidateApi';
 
 
-function PositionApp() {
+
+function PositionApp(props) {
+  function onDelete(key) {
+    console.log("hi");
+  }
+
+  const deletePosition = (del) => {
+    //TO DO: Call API to delete position
+    console.log(del.key);
+  }
+
   const [TabList, setTabList] = useState([]);
   const [showAddPosition, setShowAddPosition] = useState(false);
 
@@ -58,17 +68,11 @@ function PositionApp() {
     },
     {
       title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <span>
-          <a>Invite {record.title}</a>
-          <Divider type="vertical" />
-          <a>Delete</a>
-        </span>
-      ),
+      key: 'key',
+      render: (del) => <Delete onYes={deletePosition} item={del} />
     },
   ];
-  
+
   const data = [
     {
       key: '1',
@@ -95,6 +99,8 @@ function PositionApp() {
       tags: [],
     },
   ];
+
+
   useEffect(() => {
     let tab_list = [];
     tab_list.push({ "title": "Open Positions", "URL": <DataTable columns={columns} dataSource={data} /> });
