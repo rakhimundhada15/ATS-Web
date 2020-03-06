@@ -45,17 +45,19 @@ class DataTable extends React.Component {
             <div className='dataTable'>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="ant-row">
-                        <div className="ant-col-12">
-                            <Form.Item name="modelButton" hidden={!this.props.modelButtonLabel}>
-                                <Button
-                                    htmlType="button"
-                                    onClick={this.showModal}
-                                >
-                                    {this.props.modelButtonLabel}
-                                </Button>
-                            </Form.Item>
-                        </div>
-                        <div className="ant-col-12 pull-right">
+                        { this.props.modelButtonLabel && 
+                            <div className="ant-col-12">
+                                <Form.Item name="modelButton" hidden={!this.props.modelButtonLabel}>
+                                    <Button
+                                        htmlType="button"
+                                        onClick={this.showModal}
+                                    >
+                                        {this.props.modelButtonLabel}
+                                    </Button>
+                                </Form.Item>
+                            </div>
+                        }
+                        <div className= { this.props.modelButtonLabel ? "ant-col-12 pull-right" :"ant-col-24 pull-right"  }>
                             <Form.Item name="searchString">
                                 {getFieldDecorator("searchString")(
                                     <Input
