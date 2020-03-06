@@ -51,6 +51,7 @@ class DataTable extends React.Component {
                                     <Button
                                         htmlType="button"
                                         onClick={this.showModal}
+                                        type="primary"
                                     >
                                         {this.props.modelButtonLabel}
                                     </Button>
