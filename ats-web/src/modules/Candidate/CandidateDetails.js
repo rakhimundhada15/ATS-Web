@@ -19,7 +19,7 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
             break;
         case "source":
         case "reffered_by":
-        case "location":
+        case "address":
         case "status":
         case "current_organization":
         case "notice_period":
