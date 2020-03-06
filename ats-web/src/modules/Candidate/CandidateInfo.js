@@ -2,22 +2,29 @@ import React, { useState, useEffect } from 'react';
 import './CandidateInfo.css';
 import {Button} from 'antd';
 import * as candidatesAPI from "../../api/candidateApi";
+import AddCandidate from "./AddCandidate";
 
 export default function CandidateDetails(props) {
     const [details, setDetails] = useState({});
+    const [showEditCandidate, setShowEditCandidate] = useState(false);
 
     useEffect(() => {
         async function fetchDetails() {
-            const _details =  await candidatesAPI.getCandidate(9);
+            const _details = await candidatesAPI.getCandidate(props.id);
             setDetails(_details);
         }
         fetchDetails();
-    }, [])
+    }, []);
+
+    const toggleEditPopup = () => {
+        setShowEditCandidate(!showEditCandidate);
+    }
 
     return (
         <>
+        {showEditCandidate ? <AddCandidate onCloseModal={toggleEditPopup} selectedCandidateDetails={details}/>: null}
+
             <div className="ant-row">
-                {/* <Button className="btn" type="primary">Delete</Button> */}
                 <Button className="btn" type="primary">Edit</Button>
             </div>
             <div className="ant-row ant-col-24">

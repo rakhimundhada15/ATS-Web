@@ -7,28 +7,38 @@ import FileSelector from './../../components/shared/FileSelector';
 import InputSpinner from './../../components/shared/InputSpinner';
 import { Modal } from 'antd';
 import * as CandidateDetails from './CandidateDetails';
+import * as CandidateApi from '../../api/candidateApi';
+
+let _defaultCandidateDetails = {
+  email: "",
+  mobileno: "",
+  address: "",
+  name: "",
+  middleName: "",
+  skills: "",
+  lastName: "",
+  reffered_by: "",
+  source: "",
+  status: "",
+  current_ctc: "",
+  expected_ctc: "",
+  current_organization: "",
+  notice_period: "",
+  experience:""
+};
 
 function AddCandidate(props) {
   document.title = 'Add Candidate';
-
-  let _defaultCandidateDetails = {
-    emailAddress: { value: "", errorMessage: "" },
-    phoneNumber: { value: "", errorMessage: "" },
-    location: { value: "", errorMessage: "" },
-    firstName: { value: "", errorMessage: "" },
-    middleName: { value: "", errorMessage: "" },
-    skillSet: { value: "", errorMessage: "" },
-    lastName: { value: "", errorMessage: "" },
-    referrer: { value: "", errorMessage: "" },
-    source: { value: "", errorMessage: "" },
-    status: { value: "", errorMessage: "" },
-    currentCtc: { value: "", errorMessage: "" },
-    expectedCtc: { value: "", errorMessage: "" },
-    currentOrg: { value: "", errorMessage: "" },
-    noticePeriod: { value: "", errorMessage: "" },
-  };
-
+    
   const [candidateDetails, setCandidateDetails] = useState(_defaultCandidateDetails);
+  const [candidateDetailErrors, setCandidateDetailErrors] = useState({});
+
+  useEffect(() => {
+    if(props.selectedCandidateDetails){
+       _defaultCandidateDetails = props.selectedCandidateDetails;
+      setCandidateDetails(_defaultCandidateDetails);
+    }
+}, [])  
 
   const resetForm = () => {
     props.onCloseModal();
@@ -37,22 +47,32 @@ function AddCandidate(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     let _candidateDetails = { ...candidateDetails };
-    let errorCount = 0;
+    let _candidateDetailErrors = { ...candidateDetailErrors };
+
     Object.keys(_candidateDetails).map(function (key) {
-      _candidateDetails = CandidateDetails.validate(_candidateDetails, key, _candidateDetails[key].value.trim());
-      if(_candidateDetails[key].errorMessage){
-        errorCount++;
-      }
+      _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, key, _candidateDetails[key]);
     })
-    setCandidateDetails(_candidateDetails);
-    if(errorCount==0)
-    props.onCloseModal();
+    setCandidateDetailErrors(_candidateDetailErrors);
+    if(Object.entries(_candidateDetailErrors).length === 0){
+      _candidateDetails.skills = _candidateDetails.skills;
+      setCandidateDetails(_candidateDetails);
+      CandidateApi.saveCandidate(_candidateDetails);
+      props.onCloseModal();
+    }
   };
 
   const handleOnChange = e => {
-    let _candidateDetails = { ...candidateDetails, [e.target.name]: { "value": e.target.value, "errorMessage": "" } };
-    let candidate_details = CandidateDetails.validate(_candidateDetails, e.target.name, e.target.value.trim());
-    setCandidateDetails(candidate_details);
+    let _candidateDetails = { ...candidateDetails, [e.target.name]: e.target.value} ;
+    setCandidateDetails(_candidateDetails);
+
+    let _candidateDetailErrors = { ...candidateDetailErrors, [e.target.name]: "" };
+   _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, e.target.name, e.target.value.trim());    
+    setCandidateDetailErrors(_candidateDetailErrors);
+  }
+
+  const handleExperience = (experience) => {
+    let _candidateDetails = { ...candidateDetails, "experience": experience} ;
+    setCandidateDetails(_candidateDetails);
   }
 
   return (
@@ -72,14 +92,14 @@ function AddCandidate(props) {
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="emailAddress"
+            id="email"
             label="Email Address:"
             labelclassName=""
-            name="emailAddress"
-            value={candidateDetails.emailAddress ? candidateDetails.emailAddress.value : ""}
+            name="email"
+            value={candidateDetails.email ? candidateDetails.email: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.emailAddress ? candidateDetails.emailAddress.errorMessage : ""}
+            errorMsg={candidateDetailErrors.email ? candidateDetailErrors.email : ""}
           />
         </div>
         <div className="ant-col-12">
@@ -99,40 +119,40 @@ function AddCandidate(props) {
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="phoneNumber"
+            id="mobileno"
             label="Phone Number:"
             labelclassName=""
-            name="phoneNumber"
-            value={candidateDetails.phoneNumber ? candidateDetails.phoneNumber.value : ""}
+            name="mobileno"
+            value={candidateDetails.mobileno ? candidateDetails.mobileno: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.phoneNumber ? candidateDetails.phoneNumber.errorMessage : ""}
+            errorMsg={candidateDetailErrors.mobileno ? candidateDetailErrors.mobileno : ""}
           />
         </div>
         <div className="ant-col-12">
           <TextInput
-            id="location"
+            id="address"
             label="Location:"
             labelclassName=""
-            name="location"
-            value={candidateDetails.location ? candidateDetails.location.value : ""}
+            name="address"
+            value={candidateDetails.address ? candidateDetails.address: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.location ? candidateDetails.location.errorMessage : ""}
+            errorMsg={candidateDetailErrors.address ? candidateDetailErrors.address : ""}
           />
         </div>
       </div>
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="firstName"
-            label="First Name:"
+            id="name"
+            label="Name:"
             labelclassName=""
-            name="firstName"
-            value={candidateDetails.firstName ? candidateDetails.firstName.value : ""}
+            name="name"
+            value={candidateDetails.name ? candidateDetails.name: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.firstName ? candidateDetails.firstName.errorMessage : ""}
+            errorMsg={candidateDetailErrors.name ? candidateDetailErrors.name : ""}
           />
         </div>
         <div className="ant-col-12">
@@ -143,61 +163,36 @@ function AddCandidate(props) {
             max={100}
             isRequired={false}
             label="Experience:"
-            errorMsg=""
-            onChange={(e) => console.log(e)}
+            onChange={handleExperience}
             controlClass=""
+            value={candidateDetails.experience ? candidateDetails.experience: "0"}
+            errorMsg={candidateDetailErrors.experience ? candidateDetailErrors.experience : ""}
           />
         </div>
       </div>
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="middleName"
-            label="Middle Name:"
-            labelclassName=""
-            name="middleName"
-            value={candidateDetails.middleName ? candidateDetails.middleName.value : ""}
-            onChange={(e) => handleOnChange(e)}
-            isRequired={false}
-            errorMsg={candidateDetails.middleName ? candidateDetails.middleName.errorMessage : ""}
-          />
+              id="skills"
+              label="Skill Set:"
+              labelclassName=""
+              name="skills"
+              value={candidateDetails.skills ? candidateDetails.skills : ""}
+              onChange={(e) => handleOnChange(e)}
+              isRequired={true}
+              errorMsg={candidateDetailErrors.skills ? candidateDetailErrors.skills : ""}
+            />
         </div>
         <div className="ant-col-12">
-          <TextInput
-            id="skillSet"
-            label="Skill Set:"
-            labelclassName=""
-            name="skillSet"
-            value={candidateDetails.skillSet ? candidateDetails.skillSet.value : ""}
-            onChange={(e) => handleOnChange(e)}
-            isRequired={true}
-            errorMsg={candidateDetails.skillSet ? candidateDetails.skillSet.errorMessage : ""}
-          />
-        </div>
-      </div>
-      <div className="ant-row">
-        <div className="ant-col-12">
-          <TextInput
-            id="lastName"
-            label="Last Name:"
-            labelclassName=""
-            name="lastName"
-            value={candidateDetails.lastName ? candidateDetails.lastName.value : ""}
-            onChange={(e) => handleOnChange(e)}
-            isRequired={false}
-            errorMsg={candidateDetails.lastName ? candidateDetails.lastName.errorMessage : ""}
-          />
-        </div>
-        <div className="ant-col-12">
-          <TextInput
-            id="referrer"
+        <TextInput
+            id="reffered_by"
             label="Referrer:"
             labelclassName=""
-            name="referrer"
-            value={candidateDetails.referrer ? candidateDetails.referrer.value : ""}
+            name="reffered_by"
+            value={candidateDetails.reffered_by ? candidateDetails.reffered_by: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.referrer ? candidateDetails.referrer.errorMessage : ""}
+            errorMsg={candidateDetailErrors.reffered_by ? candidateDetailErrors.reffered_by : ""}
           />
         </div>
       </div>
@@ -208,10 +203,10 @@ function AddCandidate(props) {
             label="Source:"
             labelclassName=""
             name="source"
-            value={candidateDetails.source ? candidateDetails.source.value : ""}
+            value={candidateDetails.source ? candidateDetails.source: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.source ? candidateDetails.source.errorMessage : ""}
+            errorMsg={candidateDetailErrors.source ? candidateDetailErrors.source : ""}
           />
         </div>
         <div className="ant-col-12">
@@ -220,62 +215,62 @@ function AddCandidate(props) {
             label="Status:"
             labelclassName=""
             name="status"
-            value={candidateDetails.status ? candidateDetails.status.value : ""}
+            value={candidateDetails.status ? candidateDetails.status: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.status ? candidateDetails.status.errorMessage : ""}
+            errorMsg={candidateDetailErrors.status ? candidateDetailErrors.status : ""}
           />
         </div>
       </div>
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="currentCtc"
+            id="current_ctc"
             label="Current CTC:"
             labelclassName=""
-            name="currentCtc"
-            value={candidateDetails.currentCtc ? candidateDetails.currentCtc.value : ""}
+            name="current_ctc"
+            value={candidateDetails.current_ctc ? candidateDetails.current_ctc: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.currentCtc ? candidateDetails.currentCtc.errorMessage : ""}
+            errorMsg={candidateDetailErrors.current_ctc ? candidateDetailErrors.current_ctc : ""}
           />
         </div>
         <div className="ant-col-12">
           <TextInput
-            id="expectedCtc"
+            id="expected_ctc"
             label="Expected CTC:"
             labelclassName=""
-            name="expectedCtc"
-            value={candidateDetails.expectedCtc ? candidateDetails.expectedCtc.value : ""}
+            name="expected_ctc"
+            value={candidateDetails.expected_ctc ? candidateDetails.expected_ctc: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.expectedCtc ? candidateDetails.expectedCtc.errorMessage : ""}
+            errorMsg={candidateDetailErrors.expected_ctc ? candidateDetailErrors.expected_ctc : ""}
           />
         </div>
       </div>
       <div className="ant-row">
         <div className="ant-col-12">
           <TextInput
-            id="currentOrg"
+            id="current_organization"
             label="Current Organization:"
             labelclassName=""
-            name="currentOrg"
-            value={candidateDetails.currentOrg ? candidateDetails.currentOrg.value : ""}
+            name="current_organization"
+            value={candidateDetails.current_organization ? candidateDetails.current_organization: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.currentOrg ? candidateDetails.currentOrg.errorMessage : ""}
+            errorMsg={candidateDetailErrors.current_organization ? candidateDetailErrors.current_organization : ""}
           />
         </div>
         <div className="ant-col-12">
           <TextInput
-            id="noticePeriod"
+            id="notice_period"
             label="Notice Period:"
             labelclassName=""
-            name="noticePeriod"
-            value={candidateDetails.noticePeriod ? candidateDetails.noticePeriod.value : ""}
+            name="notice_period"
+            value={candidateDetails.notice_period ? candidateDetails.notice_period: ""}
             onChange={(e) => handleOnChange(e)}
             isRequired={true}
-            errorMsg={candidateDetails.noticePeriod ? candidateDetails.noticePeriod.errorMessage : ""}
+            errorMsg={candidateDetailErrors.notice_period ? candidateDetailErrors.notice_period : ""}
           />
         </div>
       </div>

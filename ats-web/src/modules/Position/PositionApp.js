@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Tag, Popconfirm } from 'antd';
 import HorizontalTabs from '../../components/shared/HorizontalTabs';
+import DataTable from '../../components/shared/dataTable'
+import AddPosition from './AddPosition';
+import { Button } from 'antd';
 import Delete from './Popconfirm';
 import '../../styles/shared.css';
 import * as CandidateApi from '../../api/candidateApi';
+
 
 
 
