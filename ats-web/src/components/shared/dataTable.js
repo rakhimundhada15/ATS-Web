@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Button, Form, Input, Icon } from 'antd/lib';
-import PropTypes from "prop-types";
 
 class DataTable extends React.Component {
     constructor(props) {

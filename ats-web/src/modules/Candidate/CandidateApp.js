@@ -13,7 +13,10 @@ function CandidateApp() {
     useEffect(() => {
         async function fetchDetails() {
             const _details = await CandidateApi.getCandidates();
-            setListOfCandidates(_details);
+            if(Object.entries(_details).length !==0){
+                console.log('candidate details ',_details)
+                setListOfCandidates(_details);
+            }
             setisLoading(false);
         }
         fetchDetails();

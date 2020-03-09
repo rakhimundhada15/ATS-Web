@@ -53,3 +53,31 @@ export const addCandidate = (newCandidate) => {
     newCandidate.id = candidateList.length + 1;
     candidateList.push(newCandidate);
 }
+
+const listOfScheduleInterview =[
+        {
+          "channel": "F2F",
+          "comment": "NA",
+          "employee_id": 2,
+          "feedback": "NA",
+          "id": 1,
+          "job_has_candidate_id": 2,
+          "location": "Niyuj HQ",
+          "schedule_time": "Wed, 26 Dec 2018 04:34:52 GMT"
+        },
+        {
+          "channel": "F2F",
+          "comment": "NA",
+          "employee_id": 3,
+          "feedback": "NA",
+          "id": 2,
+          "job_has_candidate_id": 3,
+          "location": "Niyuj HQ",
+          "schedule_time": "Wed, 26 Dec 2018 04:34:52 GMT"
+        }
+      
+];
+
+export const getScheduleIntervioewList = () => {
+    return listOfScheduleInterview;
+}

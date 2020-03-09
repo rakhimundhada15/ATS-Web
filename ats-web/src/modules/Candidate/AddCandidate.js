@@ -161,7 +161,7 @@ function AddCandidate(props) {
             name="experience"
             min={0}
             max={100}
-            isRequired={false}
+            isRequired={true}
             label="Experience:"
             onChange={handleExperience}
             controlClass=""

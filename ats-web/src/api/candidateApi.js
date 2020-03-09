@@ -1,10 +1,12 @@
 import { handleResponse, handleError } from "./apiUtils";
 import * as CandidateService from '../services/candidates';
-const baseUrl = "http://13.233.58.211:6000/candidates/";
+const baseUrl = "http://13.233.58.211:5000/candidates/";
+const url = "http://13.233.58.211:7000"
+
 
 export async function getCandidates() {
-  try {
-    let handleRes = await fetch(baseUrl + "/all");
+  try {//+ "/all"
+    let handleRes = await fetch(baseUrl);
     return handleResponse(handleRes);
   }
   catch (handleErr) {
@@ -12,9 +14,9 @@ export async function getCandidates() {
   }
 
 // return CandidateService.getCandidateToList();
-  // return fetch(baseUrl)
-  //   .then(handleResponse)
-  //   .catch(handleError);
+// return fetch(baseUrl)
+//   .then(handleResponse)
+//   .catch(handleError);
 }
 
 export function getCandidateById(candidateId) {
@@ -49,4 +51,15 @@ export function deleteCandidate(candidateId) {
   return fetch(baseUrl + candidateId, { method: "DELETE" })
     .then(handleResponse)
     .catch(handleError);
+}
+
+
+export async function getDetails(detailsUrl) {
+    try {
+      let handleRes = await fetch(url + detailsUrl);
+      return handleResponse(handleRes);
+    }
+    catch (handleErr) {
+      return handleError(handleErr);
+    }
 }
