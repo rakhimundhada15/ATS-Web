@@ -85,6 +85,7 @@ function PositionApp() {
       <Button type="primary" onClick={() => {
         setPosition(new PositionModel());
         setShowPosition(true);
+        setIsDisabled(false);
       }}>
         Add Position
       </Button>
