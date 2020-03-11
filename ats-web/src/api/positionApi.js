@@ -1,6 +1,7 @@
 import { handleResponse, handleError } from "./apiUtils";
 // const baseUrl = process.env.REACT_APP_API_URL + "/positions/";
-const baseUrl = "http://13.233.58.211:7000/positions";
+const basePortUrl = "http://13.233.58.211:7000";
+const baseUrl = basePortUrl + "/positions";
 export function getPositions() {
   return fetch(baseUrl)
     .then(handleResponse)
@@ -25,6 +26,12 @@ export function savePosition(position) {
 
 export function deletePosition(positionId) {
   return fetch(baseUrl + "/" + positionId, { method: "DELETE" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getProjects() {
+  return fetch(basePortUrl + '/projects')
     .then(handleResponse)
     .catch(handleError);
 }
