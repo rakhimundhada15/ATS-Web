@@ -31,6 +31,9 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
         case "experience":
             error = validateNumber(elementValue);
             break;
+        case "resume":
+            error = validateResume(elementValue);
+            break;
     }
     if (error) {
         candidateDetailErrors[elementName] = error;
@@ -40,6 +43,11 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
     return candidateDetailErrors;
 }
 
+const validateResume = (resume) =>{
+    if(!resume){
+        return errorMessages.fileSelectError;
+    }
+}
 const validateEmail = (email) => {
     if (!email || email === "") {
         return errorMessages.requiredFieldError;

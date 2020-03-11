@@ -9,6 +9,7 @@ function CandidateApp() {
   const [selectedCandidateId, setSelectedCandidateId] = useState("");
   const [listOfCandidates, setListOfCandidates] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+  const [reloadCandidates,setReloadCandidates] = useState(false);
 
     useEffect(() => {
         async function fetchDetails() {
@@ -19,14 +20,17 @@ function CandidateApp() {
             setisLoading(false);
         }
         fetchDetails();
-    }, [])
+    }, [reloadCandidates])
     
   const showModal = () => {
     setShowAddCandidate(true);
   }
-  const closeModal = () => {
+  const closeModal = (loadCandidates) => {
     setSelectedCandidateId("");
     setShowAddCandidate(false);
+    if(loadCandidates){
+      setReloadCandidates(true);
+    }
   }
 
   const handleClick = (candidateId)=>{
