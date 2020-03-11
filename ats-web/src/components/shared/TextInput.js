@@ -15,7 +15,7 @@ function TextInput(props) {
                 <div className={props.fieldWrapperClass}>
                     <span className={props.fieldClass}>
 
-                        <input type="text" id={props.id} name={props.name} className={props.inputControlClass}  onChange={props.onChange ? props.onChange : {}} value={props.value}  />
+                        <input type="text" disabled={props.disabled} id={props.id} name={props.name} className={props.inputControlClass}  onChange={props.onChange ? props.onChange : {}} value={props.value}  />
 
                     </span>
                     { props.errorMsg && (<div className="ant-form-explain">
