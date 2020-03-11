@@ -49,7 +49,7 @@ async function saveResume(candidate,resume){
 }
 
 export function deleteCandidate(candidateId) {
-  return fetch(baseUrl + candidateId, { method: "DELETE" })
+  return fetch(baseUrl + '/'+ candidateId, { method: "DELETE" })
     .then(handleResponse)
     .catch(handleError);
 }
