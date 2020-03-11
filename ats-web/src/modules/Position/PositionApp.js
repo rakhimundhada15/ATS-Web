@@ -93,7 +93,9 @@ function PositionApp() {
 
     <div>
       <Button type="primary" onClick={() => {
-        setPosition(new PositionModel());
+        let position = new PositionModel();
+        delete position.id;
+        setPosition(position);
         setShowPosition(true);
         setIsDisabled(false);
       }}>
