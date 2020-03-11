@@ -25,11 +25,15 @@ class Position extends React.Component {
     this.onCancel = this.onCancel.bind(this);
   }
   savePosition(position) {
-    async function savePosition(position) {
+    const savePosition = async (position) => {
       const _position = await positionApi.savePosition(position);
-      this.onCloseModal();
-    }
+      this.onCancel();
+      this.refreshPage();
+    };
     savePosition(position);
+  }
+  refreshPage() {
+    window.location.reload(false);
   }
   handleChange(e) {
     let fields = this.state.fields;

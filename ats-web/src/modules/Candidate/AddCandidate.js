@@ -47,7 +47,7 @@ function AddCandidate(props) {
   const [candidateDetails, setCandidateDetails] = useState(_defaultCandidateDetails);
   const [candidateDetailErrors, setCandidateDetailErrors] = useState({});
   const [referrerList, setReferrerList] = useState([]);
-
+  const [candidateResume, setCandidateResume] = useState(null);
 
   useEffect(() => {
     if(props.selectedCandidateDetails){
@@ -68,23 +68,29 @@ function AddCandidate(props) {
   },[employeeList])
 
   const resetForm = () => {
-    props.onCloseModal();
+    props.onCloseModal(false);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let _candidateDetails = { ...candidateDetails };
     let _candidateDetailErrors = { ...candidateDetailErrors };
 
     Object.keys(_candidateDetails).map(function (key) {
-      if(key !== "reffered_by" || (key === "reffered_by" && _candidateDetails.source === "Referral"))
+      if(key !== "resume" || key !== "reffered_by" || (key === "reffered_by" && _candidateDetails.source === "Referral"))
         _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, key, _candidateDetails[key]);
     })
+
+    if(!props.selectedCandidateDetails){
+      _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors,"resume",candidateResume);
+    }
     setCandidateDetailErrors(_candidateDetailErrors);
     if (Object.entries(_candidateDetailErrors).length === 0) {
       setCandidateDetails(_candidateDetails);
-      CandidateApi.saveCandidate(_candidateDetails);
-      props.onCloseModal();
+      const response = await CandidateApi.saveCandidate(_candidateDetails,candidateResume);
+      if(response.id){
+        props.onCloseModal(true);
+      }      
     }
   };
 
@@ -94,6 +100,10 @@ function AddCandidate(props) {
     let _candidateDetailErrors = { ...candidateDetailErrors, [e.target.name]: "" };
     _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, e.target.name, e.target.value.trim());
     setCandidateDetailErrors(_candidateDetailErrors);
+  }
+
+  const handleOnFileChange = e => {
+    setCandidateResume(e.target.files[0]);
   }
 
   const handleOnSelectChange = (field, value) => {
@@ -140,14 +150,14 @@ function AddCandidate(props) {
           </div>
           <div className="ant-col-12">
             <FileSelector
-              id="file-selector"
-              label="Select : "
+              id="resume"
+              label="Resume: "
               labelclassName=""
-              name="fileSelector"
-              value=""
-              onChange={(e) => handleOnChange(e)}
+              name="resume"
+              value={candidateDetails.resume ? candidateDetails.resume : ""}
+              onChange={(e) => handleOnFileChange(e)}
               isRequired={true}
-              errorMsg="Please select a file"
+              errorMsg={candidateDetailErrors.resume ? candidateDetailErrors.resume : ""}
               acceptFilesOfType="*.*"
             />
           </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Popconfirm, message } from 'antd';
-import PositionApp from '../Position/PositionApp'
 import PropTypes from "prop-types";
 
 function Delete(props) {

@@ -6,6 +6,7 @@ export const errorMessages = () => {
         "invalidPhoneNumberError": "Please enter a valid phone number.",
         "invalidNameError": "Name can contain only alphabets.",
         "invalidNumberError": "Please enter valid number.",
-        "invalidFieldselection":"Please select"
+        "invalidFieldselection":"Please select",
+        "fileSelectError": "Please select a file" 
     };
 };
