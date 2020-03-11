@@ -14,7 +14,7 @@ export function getPosition(id) {
 }
 
 export function savePosition(position) {
-  return fetch(baseUrl + (position.id ? "/"+position.id: ""), {
+  return fetch(baseUrl + (position.id ? "/update/"+position.id: ""), {
     method: position.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: { "content-type": "application/json" },
     body: JSON.stringify(position)
