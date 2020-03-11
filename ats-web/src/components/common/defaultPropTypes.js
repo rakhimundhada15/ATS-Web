@@ -7,7 +7,7 @@ export default class DefaultPropTypes {
     this.label = PropTypes.string.isRequired;
     this.onChange = PropTypes.func;
     this.isRequired = PropTypes.bool;
-    this.value = PropTypes.string;
+    this.value = PropTypes.any;
     this.errorMsg = PropTypes.string;
     this.containerClass = PropTypes.string;
     this.containerErrorClass = PropTypes.string;

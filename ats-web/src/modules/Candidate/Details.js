@@ -12,7 +12,7 @@ function Details(props) {
     useEffect(() => {
         let tab_list = [];
         tab_list.push({ "title": "Candidate Details", "URL": <CandidateInfo id={props.selectedCandidateId} /> });
-        tab_list.push({ "title": "Associated Positions", "URL": <AssociatedPosition /> });
+        tab_list.push({ "title": "Associated Positions", "URL": <AssociatedPosition  id={props.selectedCandidateId}/> });
         setTabList(tab_list)
     }, []);
 

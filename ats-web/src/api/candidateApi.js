@@ -1,29 +1,14 @@
 import { handleResponse, handleError } from "./apiUtils";
-import * as CandidateService from '../services/candidates';
-const baseUrl = "http://13.233.58.211:5000/candidates/";
-const url = "http://13.233.58.211:7000"
-
+const baseUrl = "http://13.233.58.211:5000/candidates";
 
 export async function getCandidates() {
-  try {//+ "/all"
+  try {
     let handleRes = await fetch(baseUrl);
     return handleResponse(handleRes);
   }
   catch (handleErr) {
     return handleError(handleErr);
   }
-
-// return CandidateService.getCandidateToList();
-// return fetch(baseUrl)
-//   .then(handleResponse)
-//   .catch(handleError);
-}
-
-export function getCandidateById(candidateId) {
-  return CandidateService.getCandidateById(candidateId);
-  // return fetch(baseUrl)
-  //   .then(handleResponse)
-  //   .catch(handleError);
 }
 
 export async function getCandidate(id) {
@@ -37,14 +22,13 @@ export async function getCandidate(id) {
 }
 
 export function saveCandidate(candidate) {
-  return CandidateService.addCandidate(candidate);
-  // return fetch(baseUrl + (candidate.id || ""), {
-  //   method: candidate.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
-  //   headers: { "content-type": "application/json" },
-  //   body: JSON.stringify(candidate)
-  // })
-  //   .then(handleResponse)
-  //   .catch(handleError);
+  return fetch(baseUrl + (candidate.id ? "/"+candidate.id: ""), {
+    method: candidate.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(candidate)
+  })
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 export function deleteCandidate(candidateId) {
@@ -54,12 +38,12 @@ export function deleteCandidate(candidateId) {
 }
 
 
-export async function getDetails(detailsUrl) {
-    try {
-      let handleRes = await fetch(url + detailsUrl);
-      return handleResponse(handleRes);
-    }
-    catch (handleErr) {
-      return handleError(handleErr);
-    }
-}
+export function saveAssociateCandidate(associateCandidateDetails) {
+    return fetch(baseUrl + '/job_has_candidate', {
+        method:  "POST", // POST for create, PUT to update when id already exists.
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(associateCandidateDetails)
+      })
+      .then(handleResponse)
+      .catch(handleError);
+  }

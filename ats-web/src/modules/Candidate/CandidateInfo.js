@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './CandidateInfo.css';
 import {Button} from 'antd';
 import * as candidatesAPI from "../../api/candidateApi";
 import AddCandidate from "./AddCandidate";
+import  EmployeeContext from '../../contexts/EmployeeContext';
 
-export default function CandidateDetails(props) {
+export default function CandidateInfo(props) {
+    const employeeList = useContext(EmployeeContext);
     const [details, setDetails] = useState({});
     const [showEditCandidate, setShowEditCandidate] = useState(false);
-
+    const [referrerName, setReferrerName] = useState("");
     useEffect(() => {
         async function fetchDetails() {
             const _details = await candidatesAPI.getCandidate(props.id);
             setDetails(_details);
+
+            if(employeeList && _details){
+                let _referrerName = employeeList.filter(employee=>employee.id == _details.reffered_by)[0].name;
+                setReferrerName(_referrerName);
+              }
         }
         fetchDetails();
     }, []);
-
+    
+ 
     const toggleEditPopup = () => {
         setShowEditCandidate(!showEditCandidate);
     }
@@ -30,14 +38,14 @@ export default function CandidateDetails(props) {
             <div className="ant-row ant-col-24">
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">
-                        Email
+                        Email:
                     </label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.email}</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Name</label>
+                    <label className="ant-form-item">Name:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.name}</label>
@@ -45,14 +53,14 @@ export default function CandidateDetails(props) {
             </div>
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Phone No</label>
+                    <label className="ant-form-item">Phone No:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.mobileno}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Address</label>
+                    <label className="ant-form-item">Address:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.address}</label>
@@ -61,13 +69,13 @@ export default function CandidateDetails(props) {
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Resume</label>
+                    <label className="ant-form-item">Resume:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item"><a href="abc.txt">{details && details.resume}</a></label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Experience (yrs)</label>
+                    <label className="ant-form-item">Experience (yrs):</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.experience}</label>
@@ -83,7 +91,7 @@ export default function CandidateDetails(props) {
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Skillset</label>
+                    <label className="ant-form-item">Skillset:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.skills}</label>
@@ -92,14 +100,14 @@ export default function CandidateDetails(props) {
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Expected Ctc</label>
+                    <label className="ant-form-item">Expected Ctc:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.expected_ctc}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Current Ctc</label>
+                    <label className="ant-form-item">Current Ctc:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.current_ctc}</label>
@@ -108,30 +116,30 @@ export default function CandidateDetails(props) {
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Notice Period</label>
+                    <label className="ant-form-item">Notice Period:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">{details && details.notice_period}</label>
+                    <label className="ant-form-item">{details && details.notice_period} days</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Referred By</label>
+                    <label className="ant-form-item">Referred By:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">{details && details.reffered_by}</label>
+                    <label className="ant-form-item">{details && referrerName }</label>
                 </div>
             </div>
 
             <div className="ant-row ant-col-24 row1">
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Source</label>
+                    <label className="ant-form-item">Source:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.source}</label>
                 </div>
 
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item">Status</label>
+                    <label className="ant-form-item">Status:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">{details && details.status}</label>

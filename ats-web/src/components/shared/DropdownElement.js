@@ -21,12 +21,14 @@ class DropdownElement extends Component {
             id={this.props.id}
             name={this.props.name}
             onChange={this.props.onChange}
-            className="selectWidth"
+            className={this.props.fieldClass}
             placeholder={this.props.placeHolder}
+            value= {this.props.value }
+            disabled={this.props.isDisabled ? this.props.isDisabled : false}
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
           >
             {this.props.array.map((item,index) => {
-              return (<Option key={index} value={item.Val} >
+              return (<Option key={item.Val} value={item.Val} >
                 {item.Label}
               </Option>);
             })}
@@ -67,7 +69,8 @@ DropdownElement.defaultProps = {
   requiredLabelClass: "ant-form-item-required",
   Class: "ant-form-item-children",
   divLabelClass: "ant-col ant-form-item-label ant-col-8",
-  divSelectClass: "ant-col ant-form-item-control-wrapper ant-col-12"
+  divSelectClass: "ant-col ant-form-item-control-wrapper ant-col-12",
+  fieldClass: "ant-col-18"
 };
 
 export default DropdownElement;

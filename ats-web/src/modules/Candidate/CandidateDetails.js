@@ -21,14 +21,15 @@ export const validate = (candidateDetailErrors, elementName, elementValue) => {
         case "reffered_by":
         case "address":
         case "status":
-        case "current_organization":
-        case "notice_period":
+        case "current_organization":        
         case "skills":
             error = validateRequiredFields(elementValue);
             break;
         case "current_ctc":
         case "expected_ctc":
-            error = validateCtc(elementValue);
+        case "notice_period":
+        case "experience":
+            error = validateNumber(elementValue);
             break;
     }
     if (error) {
@@ -72,11 +73,11 @@ const validateRequiredFields = (value) => {
         return errorMessages.requiredFieldError;
     }
 }
-const validateCtc = (ctc) => {
-    if (!ctc || ctc === "") {
+const validateNumber = (number) => {
+    if (!number || number === "") {
         return errorMessages.requiredFieldError;
     }
-    if (isNaN(ctc) || ctc < 0) {
-        return errorMessages.invalidCtcError;
+    if (isNaN(number) || number < 0) {
+        return errorMessages.invalidNumberError;
     }
 }

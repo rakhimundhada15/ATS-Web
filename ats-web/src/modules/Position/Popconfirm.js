@@ -25,7 +25,7 @@ function Delete(props) {
 
 }
 
-Popconfirm.PropTypes ={
+Popconfirm.propTypes ={
   onYes : PropTypes.func.isRequired
 }
 export default Delete;

@@ -1,8 +1,11 @@
 import React from 'react';
 import CandidateApp from './CandidateApp';
+import EmployeeContextProvider from './../../contexts/EmployeeContextProvider';
 
 const Candidate = () => (
-    <CandidateApp></CandidateApp>
+    <EmployeeContextProvider>
+        <CandidateApp></CandidateApp>
+    </EmployeeContextProvider>
 );
 
 export default {

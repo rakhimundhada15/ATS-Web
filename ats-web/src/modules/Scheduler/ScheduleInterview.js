@@ -5,7 +5,7 @@ import DateTimePicker from './../../components/shared/datePicker';
 import TextArea from './../../components/shared/TextArea';
 import * as InterviewsApi from '../../api/InterviewsApi';
 import * as resources from '../../components/common/resources';
-import * as CandidateApi from '../../api/candidateApi';
+import * as SharedApi from '../../api/sharedApi';
 
 function ScheduleInterview(props) {
 
@@ -44,7 +44,7 @@ function ScheduleInterview(props) {
 
     useEffect(() => {
         async function fetchEmployeeDetails() {
-            const employeeList = await CandidateApi.getDetails('/employees');
+            const employeeList = await SharedApi.getDetails('employees');
             if (Object.entries(employeeList).length !== 0) {
                 const listOfEmployees = [];
                 employeeList.map((list) => {
@@ -56,7 +56,7 @@ function ScheduleInterview(props) {
             }
         }
         // async function fetchCandidateDetails() {
-        //     const candidateList = await CandidateApi.getDetails('/candidates');
+        //     const candidateList = await SharedApi.getDetails('candidates');
         //     if (Object.entries(candidateList).length !== 0) {
         //         const listOfCandidates = [];
         //         candidateList.map((list) => {

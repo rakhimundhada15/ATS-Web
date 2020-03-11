@@ -13,9 +13,8 @@ function CandidateApp() {
     useEffect(() => {
         async function fetchDetails() {
             const _details = await CandidateApi.getCandidates();
-            if(Object.entries(_details).length !==0){
-                console.log('candidate details ',_details)
-                setListOfCandidates(_details);
+            if(_details.length > 0){
+              setListOfCandidates(_details);
             }
             setisLoading(false);
         }
@@ -27,7 +26,6 @@ function CandidateApp() {
   }
   const closeModal = () => {
     setSelectedCandidateId("");
-    // setListOfCandidates(CandidateApi.getCandidates());
     setShowAddCandidate(false);
   }
 

@@ -5,7 +5,7 @@ export const errorMessages = () => {
         "invalidEmailError": "Please enter a valid email address.",
         "invalidPhoneNumberError": "Please enter a valid phone number.",
         "invalidNameError": "Name can contain only alphabets.",
-        "invalidCtcError": "Please enter valid CTC.",
+        "invalidNumberError": "Please enter valid number.",
         "invalidFieldselection":"Please select"
     };
 };
