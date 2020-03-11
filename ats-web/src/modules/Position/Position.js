@@ -55,7 +55,6 @@ class Position extends React.Component {
     this.setState({ fields: fields });
   }
   submitform(e) {
-    debugger;
     if (this.state.props.disabled) {
       return;
     }
