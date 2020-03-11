@@ -3,10 +3,6 @@ import AddCandidate from '../Candidate/AddCandidate';
 import Details from '../Candidate/Details';
 import * as CandidateApi from '../../api/candidateApi';
 import DataTable from '../../components/shared/dataTable'
-import CandidateInfo from './CandidateInfo';
-import AssociatedPosition from './AssociatedPosition';
-import { Button } from 'antd';
-
 
 function CandidateApp() {
   const [showAddCandidate, setShowAddCandidate] = useState(false);
@@ -17,7 +13,9 @@ function CandidateApp() {
     useEffect(() => {
         async function fetchDetails() {
             const _details = await CandidateApi.getCandidates();
-            setListOfCandidates(_details);
+            if(_details.length > 0){
+              setListOfCandidates(_details);
+            }
             setisLoading(false);
         }
         fetchDetails();
@@ -28,7 +26,6 @@ function CandidateApp() {
   }
   const closeModal = () => {
     setSelectedCandidateId("");
-    // setListOfCandidates(CandidateApi.getCandidates());
     setShowAddCandidate(false);
   }
 
