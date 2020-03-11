@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Divider, Tag } from 'antd';
+import { Divider } from 'antd';
 import Position from './Position';
 import { Button } from 'antd';
 import DataTable from '../../components/shared/dataTable';
