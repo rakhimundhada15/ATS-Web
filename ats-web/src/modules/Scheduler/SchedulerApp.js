@@ -1,97 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import TextInput from '../../components/shared/TextInput';
+import * as InterviewsApi from '../../api/InterviewsApi';
+import ScheduleInterview from './ScheduleInterview';
+import DataTable from '../../components/shared/dataTable';
 import Loader from '../../components/shared/loader';
-import FileSelector from '../../components/shared/FileSelector';
-import InputSpinner from '../../components/shared/InputSpinner';
-import DateTimePicker from '../../components/shared/datePicker';
-
 function SchedulerApp() {
-  const selectDate = true;
-  return (
-    <>
-      <div className="ant-row">
-        <div className="ant-col-12">
-          <TextInput
-            id="first-name"
-            label="First Name"
-            labelclassName=""
-            name="firstName"
-            value=""
-            onChange={(e) => console.log(e.target.value)}
-            isRequired={false}
-          />
-        </div>
-      </div>
-      <div className="ant-row">
-        <div className="ant-col-24">
-          <TextInput
-            id="email"
-            label="Email"
-            labelclassName=""
-            name="email"
-            value=""
-            onChange={(e) => console.log(e.target.value)}
-            isRequired={true}
-            errorMsg="Please enter valid email"
-            labelWrapperClass="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-5"
-            fieldContainerClass="ant-col ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-12"
-          />
-        </div>
+    const [listOfInterviews, setListOfInterviews] = useState([]);
+    const [showScheduleInterview, setShowScheduleInterview] = useState(false);
+    const [isLoading, setisLoading] = useState(true);
+    useEffect(() => {
+        async function fetchScheduleInterviewDetails() {
+            const list = await InterviewsApi.getScheduleInterviewList();
+            if(Object.keys(list).length !==0){
+                setListOfInterviews(list);
+            }
+            setisLoading(false);
+        }
+        fetchScheduleInterviewDetails();
+    },[])
+    const columns = [
+        {
+            title: 'Opening',
+            dataIndex: 'comment',
+            key: 'comment',
+            render: text => <a>{text}</a>
+        },
+        {
+            title: 'Interview Panel',
+            dataIndex: 'employee_id',
+            key: 'employee_id',
+        },
+        {
+            title: 'Candidate',
+            dataIndex: 'job_has_candidate_id',
+            key: 'job_has_candidate_id',
+        },
+        {
+            title: 'Interview Date',
+            dataIndex: 'schedule_time',
+            key: 'schedule_time',
+        },
+        {
+            title: 'Mode of Interview',
+            dataIndex: 'channel',
+            key: 'channel',
 
-      </div>
-      <div className="ant-row">
-        <div className="ant-col-6">
-          <Loader loading={true} />
-        </div>
-        <div className="ant-col-6">
-          <DateTimePicker id="date-picker"
-            label="Date Picker" error={selectDate ? 'Please select a date' : ''} onChange={(date) => console.log("Interview schedule on ", date)} />
-        </div>
-      </div>
-      <div className="ant-row">
-        <div className="ant-col-6">
-          <FileSelector
-            id="file-selector"
-            label="Select : "
-            labelclassName=""
-            name="fileSelector"
-            value=""
-            onChange={(e) => console.log("On Change --->", e.target.files[0])}
-            isRequired={true}
-            errorMsg="Please select a file"
-            acceptFilesOfType="*.*"
-          />
-        </div>
-      </div>
+        },
+        {
+            title: 'Location',
+            dataIndex: 'location',
+            key: 'location',
+        }
+    ];
 
-      <div className="ant-row">
-        <div className="ant-col-6">
-          <InputSpinner
-            id="spinner1"
-            name="inputSpinner"
-            min={0}
-            max={20}
-            isRequired={true}
-            label="Left Input Spinner"
-            errorMsg="Please select valid experience years"
-            onChange={(e) => console.log("On Change --->", e)}
-          />
-        </div>
-        <div className="ant-col-6">
-          <InputSpinner
-            id="spinner2"
-            name="input1Spinner"
-            min={0}
-            max={15}
-            isRequired={true}
-            label="Right Input Spinner"
-            errorMsg="Please select valid experience years"
-            onChange={(e) => console.log("On Change --->", e)}
-          />
-        </div>
-      </div>
-    </>
-  );
+
+
+    const showModal = () => {
+        setShowScheduleInterview(true);
+    }
+    const closeModal = () => {
+        // setSelectedCandidateId("");
+        // setListOfCandidates(CandidateApi.getCandidates());
+        setShowScheduleInterview(false);
+    }
+
+
+    return (
+        <>
+            {showScheduleInterview ? <ScheduleInterview onCancel={closeModal} /> : null}
+            {isLoading ? <Loader loading={isLoading}/> :<DataTable columns={columns}
+                dataSource={listOfInterviews}
+                modelButtonLabel="Schedule Interview"
+                showModal={showModal}
+                rowKey='id'/>}
+        </>
+    );
 }
 
 export default SchedulerApp;

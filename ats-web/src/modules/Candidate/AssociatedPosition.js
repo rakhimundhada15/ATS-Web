@@ -1,15 +1,17 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../../components/shared/dataTable';
-import { Modal} from 'antd';
+import { Modal } from 'antd';
 import DropdownElement from '../../components/shared/DropdownElement';
 import * as resources from '../../components/common/resources';
+import * as SharedApi from '../../api/sharedApi';
+import * as CandidateApi from '../../api/candidateApi';
+import DefaultProps from '../../components/common/defaultProps';
 function AssociatedPosition(props) {
     const columns = [
         {
             title: 'Project',
             dataIndex: 'project',
-            key: 'project',
-            render: text => <a>{text}</a>,
+            key: 'project'
         },
         {
             title: 'Position',
@@ -53,31 +55,45 @@ function AssociatedPosition(props) {
         },
     ];
 
-    const projectNames = [
-        {
-            Val: 'alert_logic',
-            Label: 'Alert Logic'
-        },
-        {
-            Val: 'carbonet',
-            Label: 'Carbonet'
+    const [projectNames, setProjectNames] = useState([]);
+    const [openPositions, setOpenPositions] = useState([]);
+
+    useEffect(() => {
+        async function fetchProjectsDetails() {
+            const projectList = await SharedApi.getDetails('projects');
+            if (Object.entries(projectList).length !== 0) {
+                const listOfProject = [];
+                projectList.map((list) => {
+                    let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
+                    listOfProject.push(obj);
+                });
+
+                setProjectNames(listOfProject);
+            }
         }
-    ];
-    const openPositions = [
-        {
-            Val: 'web_developer',
-            Label: 'Web Developer'
-        },
-        {
-            Val: 'cpp_developer',
-            Label: 'C++ Development'
+        async function fetchPositionsDetails() {
+            const positionList = await SharedApi.getDetails('positions');
+            if (Object.entries(positionList).length !== 0) {
+                const listOfPosition = [];
+                positionList.map((list) => {
+                    let obj = { "Val": list.id, "Label": list.title, 'key': list.id }
+                    listOfPosition.push(obj);
+                });
+
+                setOpenPositions(listOfPosition);
+            }
         }
-    ]
+        fetchPositionsDetails();
+        fetchProjectsDetails();
+    }, [])
+
     let defaultAssociatePosition = {
-        projects: { value: "", errorMessage: "" },
-        positions: { value: "", errorMessage: "" }
+        candidate_id: props.id,
+        position_id:'',
+        project_id:''
     }
     const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
+    const [associatePositionError, setAssociatePositionError] = useState({});
     const [visible, setVisible] = useState(false);
 
     const showUserModal = (showmodel) => {
@@ -88,9 +104,7 @@ function AssociatedPosition(props) {
 
     const onCancel = () => {
         setVisible(false);
-        console.log('associatePosition', associatePosition ,defaultAssociatePosition)
         setAssociatePosition(defaultAssociatePosition);
-       // form.resetFields()
     };
 
     const onSaveAssociate = (e) => {
@@ -98,24 +112,28 @@ function AssociatedPosition(props) {
         let associatePositions = { ...associatePosition };
         let errorCount = 0;
         Object.keys(associatePositions).map(function (key) {
-             associatePositions = validate(associatePositions, key, associatePositions[key].value.trim());
-            if (associatePositions[key].errorMessage) {
+          let  _associatePositionError = validate({...associatePositionError}, key, associatePositions[key]);
+
+            if (_associatePositionError[key]) {
+                setAssociatePositionError(_associatePositionError);
                 errorCount++;
             }
         })
+        
         setAssociatePosition(associatePositions);
-        if (!errorCount){
+        if (!errorCount) {
+            CandidateApi.saveAssociateCandidate(associatePosition)
             setVisible(false);
         }
-           
+
     };
 
     const handleOnChange = (key, value) => {
-        let associatedPosition = { ...associatePosition, [key]: { "value": value, "errorMessage": "" } };
+        let associatedPosition = { ...associatePosition, [key]: value };
         setAssociatePosition(associatedPosition);
     }
     const errorMessages = resources.errorMessages();
-    const validate = (associatePosition , elementName, elementValue)=>{
+    const validate = (associatePositionError, elementName, elementValue) => {
         let error = null;
         switch (elementName) {
             case "projects":
@@ -126,12 +144,12 @@ function AssociatedPosition(props) {
                 break;
         }
         if (error) {
-            associatePosition[elementName].errorMessage = error;
+            associatePositionError[elementName] = error;
         }
-        return associatePosition;
-    } 
+        return associatePositionError;
+    }
 
-   const validateSelectedValue =(selectedOption) =>{
+    const validateSelectedValue = (selectedOption) => {
         if (!selectedOption || selectedOption === "") {
             return errorMessages.invalidFieldselection;
         }
@@ -140,22 +158,25 @@ function AssociatedPosition(props) {
 
         <div>
             <DataTable columns={columns} dataSource={data} modelButtonLabel="Associate Position" showModal={showUserModal} />
-            <Modal centered title="Associate Position" okText="Associate" width="1000px" visible={visible} onOk={onSaveAssociate} onCancel={onCancel}>
+            <Modal centered title="Associate Position" okText="Associate" width="500px" visible={visible} onOk={onSaveAssociate} onCancel={onCancel}>
                 <div className="ant-row">
                     <div className="ant-col-24">
                         <DropdownElement id="projects"
                             name="projects"
                             placeHolder="Select Project"
-                            onChange={(e) => handleOnChange('projects', e)}
-                            error={associatePosition.projects.errorMessage ? associatePosition.projects.errorMessage +' project' : ""} label="Project :" array={projectNames} />
+                            onChange={(e) => handleOnChange('project_id', e)}
+                            value={associatePosition.project_id ?associatePosition.project_id :''}
+                            error={associatePositionError.project_id? associatePositionError.project_id + ' project' : ""} label="Project" array={projectNames} 
+                            fieldClass= "ant-col-24"/>
                     </div>
                 </div>
                 <div className="ant-row">
                     <div className="ant-col-24">
                         <DropdownElement id="positions" name="positions"
                             placeHolder="Select position"
-                            onChange={(e) => handleOnChange('positions', e)}
-                            error={associatePosition.positions.errorMessage ? associatePosition.positions.errorMessage+' position' : ""} label='Positions : ' array={openPositions} />
+                            onChange={(e) => handleOnChange('position_id', e)}
+                            value={associatePosition.position_id ?associatePosition.position_id :''}
+                            error={associatePositionError.position_id ? associatePositionError.position_id + ' position' : ""} label='Positions' array={openPositions} fieldClass="ant-col-24"/>
                     </div>
                 </div>
             </Modal>

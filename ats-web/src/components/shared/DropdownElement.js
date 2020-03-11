@@ -63,14 +63,14 @@ DropdownElement.propTypes = {
 
 DropdownElement.defaultProps = {
   error: "",
-  containerClass: "ant-col-12",
-  containerErrorClass: "ant-col-12 has-error",
+  containerClass: "ant-form-item",
+  containerErrorClass: "ant-form-item has-error",
   labelClass: "ant-form-item-label",
   requiredLabelClass: "ant-form-item-required",
   Class: "ant-form-item-children",
-  divLabelClass: "ant-col-4",
-  divSelectClass: "ant-col-8",
-  fieldClass: "ant-col-18",
+  divLabelClass: "ant-col ant-form-item-label ant-col-8",
+  divSelectClass: "ant-col ant-form-item-control-wrapper ant-col-12",
+  fieldClass: "ant-col-18"
 };
 
 export default DropdownElement;

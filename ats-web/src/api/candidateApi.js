@@ -53,3 +53,14 @@ export function deleteCandidate(candidateId) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+
+export function saveAssociateCandidate(associateCandidateDetails) {
+    return fetch(baseUrl + '/job_has_candidate', {
+        method:  "POST", // POST for create, PUT to update when id already exists.
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(associateCandidateDetails)
+      })
+      .then(handleResponse)
+      .catch(handleError);
+  }

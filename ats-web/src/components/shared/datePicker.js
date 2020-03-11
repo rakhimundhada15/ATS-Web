@@ -3,21 +3,15 @@ import PropTypes from "prop-types";
 import { DatePicker } from 'antd';
 
 function DateTimePicker(props) {
-    const [date, setDate] = useState(null);
-    const handleOnOk = (selectedDateObject) => {
-        if (selectedDateObject) {
-            props.onChange(selectedDateObject)
-        }
-    };
 
     return (
         <div className="ant-row ant-form-item">
-            <div className={!date&&props.error  ? props.containerErrorClass : props.containerClass}>
+            <div className={props.error  ? props.containerErrorClass : props.containerClass}>
                 <div className="ant-col ant-form-item-label ant-col-xs-24 ant-col-sm-8">
                     <label htmlFor={props.id} className={props.isRequired ? props.requiredLabelClass : ''}>{props.label}</label></div>
                 <div className={props.controlClass}>
-                    <DatePicker format="MM/DD/YYYY HH:mm" onChange={date => setDate(date)} showTime={true} disabledSeconds="true" onOk={dateObj => handleOnOk(dateObj)} />
-                    {!date&&props.error  && (
+                    <DatePicker format="MM/DD/YYYY HH:mm" onChange={props.onChange} showTime={true} disabledSeconds="true"  />
+                    {props.error  && (
                         <div className="ant-form-explain">{props.error}</div>
                     )}
                 </div>
