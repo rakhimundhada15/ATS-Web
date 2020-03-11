@@ -24,7 +24,7 @@ export function savePosition(position) {
 }
 
 export function deletePosition(positionId) {
-  return fetch(baseUrl + positionId, { method: "DELETE" })
+  return fetch(baseUrl + "/" + positionId, { method: "DELETE" })
     .then(handleResponse)
     .catch(handleError);
 }
