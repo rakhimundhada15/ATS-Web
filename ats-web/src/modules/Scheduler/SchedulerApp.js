@@ -58,8 +58,6 @@ function SchedulerApp() {
         setShowScheduleInterview(true);
     }
     const closeModal = () => {
-        // setSelectedCandidateId("");
-        // setListOfCandidates(CandidateApi.getCandidates());
         setShowScheduleInterview(false);
     }
 

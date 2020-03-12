@@ -6,6 +6,7 @@ import TextArea from './../../components/shared/TextArea';
 import * as InterviewsApi from '../../api/InterviewsApi';
 import * as resources from '../../components/common/resources';
 import * as SharedApi from '../../api/sharedApi';
+import * as CandidateApi from '../../api/candidateApi';
 
 function ScheduleInterview(props) {
 
@@ -55,20 +56,20 @@ function ScheduleInterview(props) {
                 setEmployeeDetails(listOfEmployees);
             }
         }
-        // async function fetchCandidateDetails() {
-        //     const candidateList = await SharedApi.getDetails('candidates');
-        //     if (Object.entries(candidateList).length !== 0) {
-        //         const listOfCandidates = [];
-        //         candidateList.map((list) => {
-        //             let obj = { "Val": list.id, "Label": list.title, 'key': list.id }
-        //             listOfCandidates.push(obj);
-        //         });
+        async function fetchCandidateDetails() {
+            const candidateList = await CandidateApi.getCandidates();
+            if (Object.entries(candidateList).length !== 0) {
+                const listOfCandidates = [];
+                candidateList.map((list) => {
+                    let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
+                    return listOfCandidates.push(obj);
+                });
 
-        //         setOpenPositions(listOfCandidates);
-        //     }
-        // }
+                setCandidateDetails(listOfCandidates);
+            }
+        }
         fetchEmployeeDetails();
-        //fetchCandidateDetails();
+        fetchCandidateDetails();
     }, [])
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,6 +83,9 @@ function ScheduleInterview(props) {
         if (Object.entries(scheduleDetailsErrors).length === 0) {
             setSchedulerDetails(scheduleDetails);
             const responce = await InterviewsApi.setScheduleInterview(schedulerDetails)
+            if(responce.status==="OK"){
+                props.fetchScheduleInterviewDetails();
+            }
             props.onCancel();
         }
     }
@@ -141,8 +145,8 @@ function ScheduleInterview(props) {
                         placeHolder="Select Candidate"
                         onChange={(e) => handleOnChange('job_has_candidate_id', e)}
                         isRequired={true}
-                        array={employeeDetails}
-                        error={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id +'candidate' : ""}
+                        array={candidateDetails}
+                        error={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id +' candidate' : ""}
                         value={schedulerDetails.job_has_candidate_id ? schedulerDetails.job_has_candidate_id : ""}
                     />
                 </div>
@@ -152,7 +156,7 @@ function ScheduleInterview(props) {
                         placeHolder="Select Interviewer"
                         onChange={(e) => handleOnChange('employee_id', e)}
                         isRequired={true}
-                        error={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id +'interview panel' : ""}
+                        error={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id +' interview panel' : ""}
                         value={schedulerDetails.employee_id ? schedulerDetails.employee_id : ""}
                         label='Interview panel' array={employeeDetails} />
                 </div>
@@ -164,13 +168,13 @@ function ScheduleInterview(props) {
                         placeHolder="Select mode of Interview"
                         onChange={(e) => handleOnChange('chanel', e)}
                         isRequired={true}
-                        error={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel +'mode of Interview': ""}
+                        error={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel +' mode of Interview': ""}
                         value={schedulerDetails.chanel ? schedulerDetails.chanel : ""}
                         label='Mode of Interview' array={modeOfInterview} />
                 </div>
                 <div className="ant-col-12">
                     <DateTimePicker id="schedule_time" name='scheduleTime' isRequired={true}
-                        label="Schedule Time" error={schedulerDetailsErrors.schedule_time ? schedulerDetailsErrors.schedule_time + 'Schedule Time' : ""} onChange={(date,dateString)=>handleOnChange('schedule_time',dateString)} />
+                        label="Schedule Time" error={schedulerDetailsErrors.schedule_time ? schedulerDetailsErrors.schedule_time + ' Schedule Time' : ""} onChange={(date,dateString)=>handleOnChange('schedule_time',dateString)} />
 
                 </div>
             </div>
@@ -181,7 +185,7 @@ function ScheduleInterview(props) {
                         placeHolder="Select location"
                         onChange={(e) => handleOnChange('location', e)} label='Interview Location'
                         value={schedulerDetails.location ? schedulerDetails.location : ""}
-                        error={schedulerDetailsErrors.location ? schedulerDetailsErrors.location +'location': ""}
+                        error={schedulerDetailsErrors.location ? schedulerDetailsErrors.location +' location': ""}
                         array={interviewLocation}
                         isRequired={true} />
                 </div>
