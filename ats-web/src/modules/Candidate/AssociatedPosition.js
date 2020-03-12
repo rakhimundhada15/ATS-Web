@@ -16,7 +16,7 @@ function AssociatedPosition(props) {
             key: 'title',
         },
         {
-            title: 'No. ofcopenings',
+            title: 'No. of openings',
             dataIndex: 'no_of_openings',
             key: 'no_of_openings',
         },
@@ -115,7 +115,7 @@ function AssociatedPosition(props) {
         setAssociatePositionError(_associatePositionError);        
         setAssociatePosition(associatePositions);
         if (!errorCount) {
-         let responce =   CandidateApi.saveAssociateCandidate(associatePosition);
+         let responce =  await CandidateApi.saveAssociateCandidate(associatePosition);
          if(responce.id){
             //candidateAssociatedPositionDetails();
          }
