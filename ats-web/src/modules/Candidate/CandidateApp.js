@@ -11,36 +11,37 @@ function CandidateApp() {
   const [selectedCandidateId, setSelectedCandidateId] = useState("");
   const [listOfCandidates, setListOfCandidates] = useState([]);
   const [isLoading, setisLoading] = useState(true);
-  const [reloadCandidates,setReloadCandidates] = useState(false);
+  const [reloadCandidates, setReloadCandidates] = useState(false);
 
-    useEffect(() => {
-        async function fetchDetails() {
-            const _details = await CandidateApi.getCandidates();
-            if(_details.length > 0){
-              setListOfCandidates(_details);
-            }
-            setisLoading(false);
+  useEffect(() => {
+    async function fetchDetails() {
+        setisLoading(true);
+        const _details = await CandidateApi.getCandidates();
+        if (_details.length > 0) {
+          setListOfCandidates(_details);
         }
-        fetchDetails();
-    },[reloadCandidates])
-
-    const deletePosition = async (del) => {
-      setisLoading(true);
-      await CandidateApi.deleteCandidate(del.id);
-      setReloadCandidates(true);
+        setisLoading(false);
+        setReloadCandidates(false);
     }
+    fetchDetails();
+  }, [reloadCandidates])
+
+  const deletePosition = async (del) => {
+    await CandidateApi.deleteCandidate(del.id);
+    setReloadCandidates(true);
+  }
   const showModal = () => {
     setShowAddCandidate(true);
   }
   const closeModal = (loadCandidates) => {
     setSelectedCandidateId("");
     setShowAddCandidate(false);
-    if(loadCandidates){
+    if (loadCandidates) {
       setReloadCandidates(true);
-    }
+    }    
   }
 
-  const handleClick = (candidateId)=>{
+  const handleClick = (candidateId) => {
     setShowAddCandidate(false);
     setSelectedCandidateId(candidateId);
   }
@@ -48,7 +49,7 @@ function CandidateApp() {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',     
+      key: 'name',
       render: (text, record) => (
         <span>
           <a onClick={() => handleClick(record.id)}>{text}</a>
@@ -59,7 +60,7 @@ function CandidateApp() {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      
+
     },
     {
       title: 'Experience',
@@ -80,16 +81,16 @@ function CandidateApp() {
 
   return (
     <>
-    {selectedCandidateId ? <Details selectedCandidateId={selectedCandidateId}/> : 
-      <>
-        {showAddCandidate ? <AddCandidate onCloseModal={closeModal} />: null}
-        {!isLoading && <DataTable columns={columns} 
-                dataSource={listOfCandidates} 
-                modelButtonLabel="Add Candidate" 
-                showModal={showModal}
-                rowKey='id' /> }
-      </>
-    }
+      {selectedCandidateId ? <Details selectedCandidateId={selectedCandidateId} /> :
+        <>
+          {showAddCandidate ? <AddCandidate onCloseModal={closeModal} /> : null}
+          {!isLoading && <DataTable columns={columns}
+            dataSource={listOfCandidates}
+            modelButtonLabel="Add Candidate"
+            showModal={showModal}
+            rowKey='id' />}
+        </>
+      }
     </>
   );
 }
