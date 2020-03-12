@@ -5,60 +5,60 @@ import DropdownElement from '../../components/shared/DropdownElement';
 import * as resources from '../../components/common/resources';
 import * as SharedApi from '../../api/sharedApi';
 import * as CandidateApi from '../../api/candidateApi';
-import DefaultProps from '../../components/common/defaultProps';
+import Loader from '../../components/shared/loader';
+
 function AssociatedPosition(props) {
     const columns = [
-        {
-            title: 'Project',
-            dataIndex: 'project',
-            key: 'project'
-        },
+       
         {
             title: 'Position',
-            dataIndex: 'position',
-            key: 'position',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'No. of openings',
+            dataIndex: 'no_of_openings',
+            key: 'no_of_openings',
+        },
+        {
+            title: 'Skills',
+            dataIndex: 'skills',
+            key: 'skills',
+        },
+        {
+            title: 'Experience',
+            dataIndex: 'experience',
+            key: 'experience',
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-        },
-        {
-            title: 'Last Interview Date',
-            dataIndex: 'lastInterviewDate',
-            key: 'lastInterviewDate',
         }
 
     ];
 
-    const data = [
-        {
-            key: '1',
-            position: 'Java Developer',
-            project: 'Project 1',
-            lastInterviewDate: '1-02-2020',
-            status: 'cv sholisted'
-        },
-        {
-            key: '2',
-            position: 'web Developer',
-            project: 'Project 2',
-            lastInterviewDate: '2-02-2020',
-            status: 'cv Rejected'
-        },
-        {
-            key: '3',
-            position: 'C++ Developer',
-            project: 'Project 1',
-            lastInterviewDate: '2-02-2020',
-            status: 'offered'
-        },
-    ];
-
+    let defaultAssociatePosition = {
+        candidate_id: props.id,
+        position_id:'',
+        project_id:''
+    }
+    const [candidateAssociatedPositions,setCandidateAssociatedPositions]=useState([]);
     const [projectNames, setProjectNames] = useState([]);
     const [openPositions, setOpenPositions] = useState([]);
-
+    const [isLoading, setisLoading] = useState(true);
+    const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
+    const [associatePositionError, setAssociatePositionError] = useState({});
+    const [visible, setVisible] = useState(false);
     useEffect(() => {
+        async function candidateAssociatedPositionDetails() {
+            const candidateAssociatePostion = await CandidateApi.getCandidate(props.id+'/positions');
+            if(Object.keys(candidateAssociatePostion).length !==0){
+                setCandidateAssociatedPositions(candidateAssociatePostion);
+            }
+            setisLoading(false);
+           
+        }
         async function fetchProjectsDetails() {
             const projectList = await SharedApi.getDetails('projects');
             if (Object.entries(projectList).length !== 0) {
@@ -83,18 +83,10 @@ function AssociatedPosition(props) {
                 setOpenPositions(listOfPosition);
             }
         }
+        candidateAssociatedPositionDetails();
         fetchPositionsDetails();
         fetchProjectsDetails();
     }, [])
-
-    let defaultAssociatePosition = {
-        candidate_id: props.id,
-        position_id:'',
-        project_id:''
-    }
-    const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
-    const [associatePositionError, setAssociatePositionError] = useState({});
-    const [visible, setVisible] = useState(false);
 
     const showUserModal = (showmodel) => {
         if (showmodel) {
@@ -103,11 +95,12 @@ function AssociatedPosition(props) {
     };
 
     const onCancel = () => {
-        setVisible(false);
         setAssociatePosition(defaultAssociatePosition);
+        setAssociatePositionError({});
+        setVisible(false);
     };
 
-    const onSaveAssociate = (e) => {
+    const onSaveAssociate = async(e) => {
         e.preventDefault();
         let associatePositions = { ...associatePosition };
         let _associatePositionError = { ...associatePositionError };
@@ -122,7 +115,10 @@ function AssociatedPosition(props) {
         setAssociatePositionError(_associatePositionError);        
         setAssociatePosition(associatePositions);
         if (!errorCount) {
-            CandidateApi.saveAssociateCandidate(associatePosition)
+         let responce =  await CandidateApi.saveAssociateCandidate(associatePosition);
+         if(responce.id){
+            //candidateAssociatedPositionDetails();
+         }
             setVisible(false);
         }
 
@@ -159,8 +155,8 @@ function AssociatedPosition(props) {
     return (
 
         <div>
-            <DataTable columns={columns} dataSource={data} modelButtonLabel="Associate Position" showModal={showUserModal} />
-            <Modal centered title="Associate Position" okText="Associate" width="500px" visible={visible} onOk={onSaveAssociate} onCancel={onCancel}>
+            {isLoading ? <Loader loading={isLoading}/> : <DataTable columns={columns} dataSource={candidateAssociatedPositions} modelButtonLabel="Associate Position" showModal={showUserModal} />}
+            <Modal centered title="Associate Position" okText="Associate" width="500px" visible={visible} onOk={onSaveAssociate} onCancel={e =>onCancel(e)}>
                 <div className="ant-row">
                     <div className="ant-col-24">
                         <DropdownElement id="projects"
