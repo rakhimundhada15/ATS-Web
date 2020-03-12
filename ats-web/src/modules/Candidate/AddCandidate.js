@@ -77,20 +77,21 @@ function AddCandidate(props) {
     let _candidateDetailErrors = { ...candidateDetailErrors };
 
     Object.keys(_candidateDetails).map(function (key) {
-      if(key !== "resume" || key !== "reffered_by" || (key === "reffered_by" && _candidateDetails.source === "Referral"))
+      if((key !== "resume" && key !== "reffered_by") || (key === "reffered_by" && _candidateDetails.source === "Referral"))
         _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors, key, _candidateDetails[key]);
     })
 
-    if(!props.selectedCandidateDetails){
+    if(_candidateDetails && !_candidateDetails.id){
       _candidateDetailErrors = CandidateDetails.validate(_candidateDetailErrors,"resume",candidateResume);
     }
     setCandidateDetailErrors(_candidateDetailErrors);
     if (Object.entries(_candidateDetailErrors).length === 0) {
       setCandidateDetails(_candidateDetails);
       const response = await CandidateApi.saveCandidate(_candidateDetails,candidateResume);
+  
       if(response.id){
         props.onCloseModal(true);
-      }      
+      }     
     }
   };
 
