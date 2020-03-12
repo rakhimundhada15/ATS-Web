@@ -5,67 +5,64 @@ import DropdownElement from '../../components/shared/DropdownElement';
 import * as resources from '../../components/common/resources';
 import * as SharedApi from '../../api/sharedApi';
 import * as CandidateApi from '../../api/candidateApi';
-import DefaultProps from '../../components/common/defaultProps';
+import Loader from '../../components/shared/loader';
+
 function AssociatedPosition(props) {
     const columns = [
-        {
-            title: 'Project',
-            dataIndex: 'project',
-            key: 'project'
-        },
+       
         {
             title: 'Position',
-            dataIndex: 'position',
-            key: 'position',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'No. ofcopenings',
+            dataIndex: 'no_of_openings',
+            key: 'no_of_openings',
+        },
+        {
+            title: 'Skills',
+            dataIndex: 'skills',
+            key: 'skills',
+        },
+        {
+            title: 'Experience',
+            dataIndex: 'experience',
+            key: 'experience',
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-        },
-        {
-            title: 'Last Interview Date',
-            dataIndex: 'lastInterviewDate',
-            key: 'lastInterviewDate',
         }
 
     ];
 
-    const data = [
-        {
-            key: '1',
-            position: 'Java Developer',
-            project: 'Project 1',
-            lastInterviewDate: '1-02-2020',
-            status: 'cv sholisted'
-        },
-        {
-            key: '2',
-            position: 'web Developer',
-            project: 'Project 2',
-            lastInterviewDate: '2-02-2020',
-            status: 'cv Rejected'
-        },
-        {
-            key: '3',
-            position: 'C++ Developer',
-            project: 'Project 1',
-            lastInterviewDate: '2-02-2020',
-            status: 'offered'
-        },
-    ];
-
+    const [candidateAssociatedPositions,setCandidateAssociatedPositions]=useState([]);
     const [projectNames, setProjectNames] = useState([]);
     const [openPositions, setOpenPositions] = useState([]);
-
+    const [isLoading, setisLoading] = useState(true);
+    const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
+    const [associatePositionError, setAssociatePositionError] = useState(defaultAssociatePosition);
+    const [visible, setVisible] = useState(false);
     useEffect(() => {
+
+        async function candidateAssociatedPositionDetails() {
+            
+            const candidateAssociatePostion = await CandidateApi.getCandidate(props.id+'/positions');
+            if(Object.keys(candidateAssociatePostion).length !==0){
+                setCandidateAssociatedPositions(candidateAssociatePostion);
+            }
+            setisLoading(false);
+           
+        }
         async function fetchProjectsDetails() {
             const projectList = await SharedApi.getDetails('projects');
             if (Object.entries(projectList).length !== 0) {
                 const listOfProject = [];
                 projectList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
-                    listOfProject.push(obj);
+                     listOfProject.push(obj);
                 });
 
                 setProjectNames(listOfProject);
@@ -77,12 +74,13 @@ function AssociatedPosition(props) {
                 const listOfPosition = [];
                 positionList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.title, 'key': list.id }
-                    listOfPosition.push(obj);
+                     listOfPosition.push(obj);
                 });
 
                 setOpenPositions(listOfPosition);
             }
         }
+        candidateAssociatedPositionDetails();
         fetchPositionsDetails();
         fetchProjectsDetails();
     }, [])
@@ -92,9 +90,7 @@ function AssociatedPosition(props) {
         position_id:'',
         project_id:''
     }
-    const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
-    const [associatePositionError, setAssociatePositionError] = useState({});
-    const [visible, setVisible] = useState(false);
+ 
 
     const showUserModal = (showmodel) => {
         if (showmodel) {
@@ -131,6 +127,9 @@ function AssociatedPosition(props) {
     const handleOnChange = (key, value) => {
         let associatedPosition = { ...associatePosition, [key]: value };
         setAssociatePosition(associatedPosition);
+        let _associatePositionError = { ...associatePositionError, [key]: "" };
+        _associatePositionError = validate(_associatePositionError, [key], value);
+        setAssociatePositionError(_associatePositionError);
     }
     const errorMessages = resources.errorMessages();
     const validate = (associatePositionError, elementName, elementValue) => {
@@ -157,16 +156,17 @@ function AssociatedPosition(props) {
     return (
 
         <div>
-            <DataTable columns={columns} dataSource={data} modelButtonLabel="Associate Position" showModal={showUserModal} />
+             {isLoading ? <Loader loading={isLoading}/> : <DataTable columns={columns} dataSource={candidateAssociatedPositions} modelButtonLabel="Associate Position" showModal={showUserModal} />}
             <Modal centered title="Associate Position" okText="Associate" width="500px" visible={visible} onOk={onSaveAssociate} onCancel={onCancel}>
                 <div className="ant-row">
                     <div className="ant-col-24">
                         <DropdownElement id="projects"
                             name="projects"
                             placeHolder="Select Project"
+                            isRequired={true}
                             onChange={(e) => handleOnChange('project_id', e)}
                             value={associatePosition.project_id ?associatePosition.project_id :''}
-                            error={associatePositionError.project_id? associatePositionError.project_id + ' project' : ""} label="Project" array={projectNames} 
+                            error={associatePositionError.project_id? associatePositionError.project_id + ' project' : ""} label="Project :" array={projectNames} 
                             fieldClass= "ant-col-24"/>
                     </div>
                 </div>
@@ -174,9 +174,10 @@ function AssociatedPosition(props) {
                     <div className="ant-col-24">
                         <DropdownElement id="positions" name="positions"
                             placeHolder="Select position"
+                            isRequired={true}
                             onChange={(e) => handleOnChange('position_id', e)}
                             value={associatePosition.position_id ?associatePosition.position_id :''}
-                            error={associatePositionError.position_id ? associatePositionError.position_id + ' position' : ""} label='Positions' array={openPositions} fieldClass="ant-col-24"/>
+                            error={associatePositionError.position_id ? associatePositionError.position_id + ' position' : ""} label='Positions :' array={openPositions} fieldClass="ant-col-24"/>
                     </div>
                 </div>
             </Modal>
