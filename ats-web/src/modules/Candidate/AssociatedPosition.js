@@ -110,16 +110,16 @@ function AssociatedPosition(props) {
     const onSaveAssociate = (e) => {
         e.preventDefault();
         let associatePositions = { ...associatePosition };
+        let _associatePositionError = { ...associatePositionError };
         let errorCount = 0;
         Object.keys(associatePositions).map(function (key) {
-          let  _associatePositionError = validate({...associatePositionError}, key, associatePositions[key]);
+            _associatePositionError = validate(_associatePositionError, key, associatePositions[key]);
 
-            if (_associatePositionError[key]) {
-                setAssociatePositionError(_associatePositionError);
+            if (_associatePositionError[key]) {                
                 errorCount++;
             }
         })
-        
+        setAssociatePositionError(_associatePositionError);        
         setAssociatePosition(associatePositions);
         if (!errorCount) {
             CandidateApi.saveAssociateCandidate(associatePosition)
@@ -131,15 +131,17 @@ function AssociatedPosition(props) {
     const handleOnChange = (key, value) => {
         let associatedPosition = { ...associatePosition, [key]: value };
         setAssociatePosition(associatedPosition);
+        let _associatePositionError = { ...associatePositionError, [key]: "" };
+        setAssociatePositionError(_associatePositionError); 
     }
     const errorMessages = resources.errorMessages();
     const validate = (associatePositionError, elementName, elementValue) => {
         let error = null;
         switch (elementName) {
-            case "projects":
+            case "project_id":
                 error = validateSelectedValue(elementValue);
                 break;
-            case "positions":
+            case "position_id":
                 error = validateSelectedValue(elementValue);
                 break;
         }

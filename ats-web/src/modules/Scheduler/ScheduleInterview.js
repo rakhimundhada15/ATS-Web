@@ -91,26 +91,23 @@ function ScheduleInterview(props) {
 
 
     const errorMessages = resources.errorMessages();
-    const validate = (schedulerDetailsErrors, elementName, elementValue) => {
+    const validate = (_schedulerDetailsErrors, elementName, elementValue) => {
         let error = null;
         switch (elementName) {
-            case "job_has_candidate_id":
-                error = validateSelectedValue(elementValue);
-                break;
+            case "job_has_candidate_id":               
             case "chanel":
-                error = validateSelectedValue(elementValue);
-                break;
             case "location":
-                error = validateSelectedValue(elementValue);
-                break;
             case "schedule_time":
+            case "employee_id":
                 error = validateSelectedValue(elementValue);
                 break;
         }
         if (error) {
-            setSchedulerDetailsErrors[elementName] = error;
+            _schedulerDetailsErrors[elementName] = error;
+        }else{
+            delete _schedulerDetailsErrors[elementName];
         }
-        return schedulerDetailsErrors;
+        return _schedulerDetailsErrors;
     }
 
     const validateSelectedValue = (selectedOption) => {
@@ -122,6 +119,9 @@ function ScheduleInterview(props) {
     const handleOnChange = (key, value) => {
         let scheduleDetails = { ...schedulerDetails, [key]: value };
         setSchedulerDetails(scheduleDetails);
+
+        let _schedulerDetailsErrors = { ...schedulerDetailsErrors, [key]: "" };
+        setSchedulerDetailsErrors(_schedulerDetailsErrors); 
     }
     return (
         <Modal title="Schedule Interview"
@@ -135,23 +135,25 @@ function ScheduleInterview(props) {
             <div className="ant-row">
                 <div className="ant-col-12">
                     <DropdownElement
-                        id={schedulerDetails.job_has_candidate_id}
+                        id="candidate_id"
                         label="Candidate Name :"
                         name="job_has_candidate_id"
                         placeHolder="Select Candidate"
                         onChange={(e) => handleOnChange('job_has_candidate_id', e)}
                         isRequired={true}
                         array={employeeDetails}
-                        errorMsg={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id +'candidate' : ""}
+                        error={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id +'candidate' : ""}
+                        value={schedulerDetails.job_has_candidate_id ? schedulerDetails.job_has_candidate_id : ""}
                     />
                 </div>
                 <div className='ant-col-12'>
                     <DropdownElement
-                        id={schedulerDetails.employee_id} name="employeeName"
+                        id="employee_id" name="employeeName"
                         placeHolder="Select Interviewer"
                         onChange={(e) => handleOnChange('employee_id', e)}
                         isRequired={true}
-                        errorMsg={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id +'interview panel' : ""}
+                        error={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id +'interview panel' : ""}
+                        value={schedulerDetails.employee_id ? schedulerDetails.employee_id : ""}
                         label='Interview panel' array={employeeDetails} />
                 </div>
             </div>
@@ -162,12 +164,13 @@ function ScheduleInterview(props) {
                         placeHolder="Select mode of Interview"
                         onChange={(e) => handleOnChange('chanel', e)}
                         isRequired={true}
-                        errorMsg={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel +'mode of Interview': ""}
+                        error={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel +'mode of Interview': ""}
+                        value={schedulerDetails.chanel ? schedulerDetails.chanel : ""}
                         label='Mode of Interview' array={modeOfInterview} />
                 </div>
                 <div className="ant-col-12">
                     <DateTimePicker id="schedule_time" name='scheduleTime' isRequired={true}
-                        label="Schedule Time" errorMsg={schedulerDetailsErrors.scheduleTime ? schedulerDetailsErrors.scheduleTime + 'Schedule Time' : ""} onChange={(date,dateString)=>handleOnChange('schedule_time',dateString)} />
+                        label="Schedule Time" error={schedulerDetailsErrors.schedule_time ? schedulerDetailsErrors.schedule_time + 'Schedule Time' : ""} onChange={(date,dateString)=>handleOnChange('schedule_time',dateString)} />
 
                 </div>
             </div>
@@ -177,7 +180,8 @@ function ScheduleInterview(props) {
                         id="location" name="location"
                         placeHolder="Select location"
                         onChange={(e) => handleOnChange('location', e)} label='Interview Location'
-                        errorMsg={schedulerDetailsErrors.location ? schedulerDetailsErrors.location +'location': ""}
+                        value={schedulerDetails.location ? schedulerDetails.location : ""}
+                        error={schedulerDetailsErrors.location ? schedulerDetailsErrors.location +'location': ""}
                         array={interviewLocation}
                         isRequired={true} />
                 </div>
@@ -192,6 +196,7 @@ function ScheduleInterview(props) {
                         minlength={0}
                         value={schedulerDetails.comments ? schedulerDetails.comments : ""}
                         onChange={(e) => handleOnChange('comments',e)}
+                        disable={false}
                     />
                 </div>
                 <div className="ant-col-12">
@@ -203,6 +208,7 @@ function ScheduleInterview(props) {
                         minlength={0}
                         value={schedulerDetails.feedback ? schedulerDetails.feedback : ""}
                         onChange={(e) => handleOnChange('feedback',e)}
+                        disable={false}
                     />
                 </div>
             </div>
