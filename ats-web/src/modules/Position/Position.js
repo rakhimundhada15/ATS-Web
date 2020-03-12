@@ -2,7 +2,7 @@ import React from 'react';
 import TextInput from '../../components/shared/TextInput';
 import { Modal } from 'antd';
 import * as positionApi from '../../api/positionApi';
-
+import DropdownElement from '../../components/shared/DropdownElement';
 
 
 class Position extends React.Component {
@@ -15,7 +15,11 @@ class Position extends React.Component {
         experience: '',
         no_of_openings: '',
         pos_location: '',
-        skills: ''
+        skills: '',
+        project_id:'',
+        employee_id:'',
+        grade:'',
+        status:''
       }
     };
     this.state.props = props;
@@ -23,21 +27,45 @@ class Position extends React.Component {
     this.submitform = this.submitform.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.state.statuses= [
+      { Val: 'closed', Label: 'Closed' },
+      { Val: 'open', Label: 'Open' },
+    ];
+    this.state.grades= [
+      { Val: 'A', Label: 'A' },
+      { Val: 'B', Label: 'B' },
+      { Val: 'C', Label: 'C' },
+      { Val: 'D', Label: 'D' },
+      { Val: 'E', Label: 'E' }
+    ];
   }
   savePosition(position) {
     async function savePosition(position) {
       const _position = await positionApi.savePosition(position);
-      this.onCloseModal();
+      //this.state.props.onCloseModal();
     }
     savePosition(position);
+    this.state.props.onCloseModal();
   }
-  handleChange(e) {
+  handleChange= (e) => {
     let fields = this.state.fields;
     fields[e.target.name] = e.target.value;
     this.setState({
       fields
     });
 
+  }
+  
+
+  dropdown_onchange = (field, value) =>  {
+   
+    let fields = this.state.fields;
+   
+    fields[field] = value;
+    this.setState({
+      fields
+    });
+  
   }
   onCancel(e) {
     this.state.props.onCloseModal();
@@ -51,7 +79,10 @@ class Position extends React.Component {
     fields["experience"] = 0;
     fields["no_of_openings"] = 0;
     fields["skills"] = "";
-    fields["pos_location"] = "";
+    fields["project_id"] = "";
+    fields["employee_id"] = "";
+    fields["grade"] = "";
+    fields["status"] = "";
     this.setState({ fields: fields });
   }
   submitform(e) {
@@ -90,9 +121,21 @@ class Position extends React.Component {
       formIsValid = false;
       errors["no_of_openings"] = "Please enter integer value.";
     }
-    if (!fields["pos_location"]) {
+    if (!fields["project_id"]) {
       formIsValid = false;
-      errors["pos_location"] = "Please enter location.";
+      errors["project_id"] = "Please select project.";
+    }
+    if (!fields["employee_id"]) {
+      formIsValid = false;
+      errors["employee_id"] = "Please select employee.";
+    }
+    if (!fields["grade"]) {
+      formIsValid = false;
+      errors["grade"] = "Please select grade.";
+    }
+    if (!fields["status"]) {
+      formIsValid = false;
+      errors["status"] = "Please select status.";
     }
     if (!fields["skills"]) {
       formIsValid = false;
@@ -121,7 +164,7 @@ class Position extends React.Component {
           onCancel={this.onCancel}
           width="1000px"
         >
-          <form >
+         
             <div className="ant-row" >
               <div className="ant-col-12">
                 <TextInput disabled={this.state.props.disabled} label={'Position Name'} id={'title'} name={'title'} value={this.state.fields.title} isRequired={true} errorMsg={this.state.errors.title} onChange={this.handleChange} />
@@ -138,17 +181,77 @@ class Position extends React.Component {
               </div>
 
               <div className="ant-col-12">
-                <TextInput disabled={this.state.props.disabled} label={'Location'} id={'pos_location'} name={'pos_location'} value={this.state.fields.pos_location} isRequired={true} errorMsg={this.state.errors.pos_location} onChange={this.handleChange} />
+                        <DropdownElement 
+                            name="project_id"
+                            id="project_id"
+                            placeHolder="Select Project"
+                            onChange={(e) =>this.dropdown_onchange("project_id",e)}
+                             value={this.state.fields.project_id}
+                             label="Project" 
+                             array={this.state.props.projects} 
+                             isRequired={true}
+                             error={this.state.errors.project_id }
+                             containerClass="ant-col-24"
+                             containerErrorClass="ant-col-24 has-error"
+                             divLabelClass="ant-col ant-form-item-label ant-col-8"
+                             divSelectClass="ant-col-16"
+                             fieldClass="ant-col-18"/>
               </div>
-            </div>
-            <div className="ant-row" >
+              </div>
+              <div className="ant-row" >
+              <div className="ant-col-12">
+                        <DropdownElement 
+                            name="employee_id"
+                            id="employee_id"
+                            placeHolder="Select Employee"
+                            isRequired={true}
+                            error={this.state.errors.employee_id }
+                            onChange={(e) =>this.dropdown_onchange("employee_id",e)}
+                            value={this.state.fields.employee_id}
+                             label="Employee"  array={this.state.props.employees}
+                             containerClass="ant-col-24"
+                             containerErrorClass="ant-col-24 has-error"
+                             divLabelClass="ant-col ant-form-item-label ant-col-8"
+                             divSelectClass="ant-col-16"
+                             fieldClass="ant-col-18" />
+              </div>
+                       
               <div className="ant-col-12">
                 <TextInput disabled={this.state.props.disabled} label={'Skills'} id={'skills'} name={'skills'} value={this.state.fields.skills} isRequired={true} errorMsg={this.state.errors.skills} onChange={this.handleChange} />
               </div>
             </div>
-
-
-          </form>
+            <div className="ant-row" >
+              <div className="ant-col-12">
+                        <DropdownElement id="grade"
+                            name="grade"
+                            placeHolder="Select Grade"
+                            isRequired={true}
+                            error={this.state.errors.grade }
+                            onChange={(e) =>this.dropdown_onchange("grade",e)}
+                            value={this.state.fields.grade}
+                             label="Grade"  array={this.state.grades}
+                             containerClass="ant-col-24"
+                             containerErrorClass="ant-col-24 has-error"
+                             divLabelClass="ant-col ant-form-item-label ant-col-8"
+                             divSelectClass="ant-col-16"
+                             fieldClass="ant-col-18" />
+              </div>
+              <div className="ant-col-12">
+                        <DropdownElement id="status"
+                            name="status"
+                            placeHolder="Select Status"
+                            isRequired={true}
+                            error={this.state.errors.status }
+                            onChange={(e) =>this.dropdown_onchange("status",e)}
+                            value={this.state.fields.status}
+                             label="Status"  array={this.state.statuses}
+                             containerClass="ant-col-24"
+                             containerErrorClass="ant-col-24 has-error"
+                             divLabelClass="ant-col ant-form-item-label ant-col-8"
+                             divSelectClass="ant-col-16"
+                             fieldClass="ant-col-18" />
+              </div>
+              </div>
         </Modal>
       </>
     );

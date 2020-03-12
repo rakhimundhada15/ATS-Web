@@ -1,8 +1,23 @@
 import { handleResponse, handleError } from "./apiUtils";
 // const baseUrl = process.env.REACT_APP_API_URL + "/positions/";
 const baseUrl = "http://13.233.58.211:7000/positions";
+const proj_baseUrl = "http://13.233.58.211:7000/projects";
+const emp_baseUrl = "http://13.233.58.211:7000/employees";
+
 export function getPositions() {
   return fetch(baseUrl)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getProjects() {
+  return fetch(proj_baseUrl)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function getEmployees() {
+  return fetch(emp_baseUrl)
     .then(handleResponse)
     .catch(handleError);
 }

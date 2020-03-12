@@ -17,7 +17,8 @@ function PositionApp() {
   const [showPosition, setShowPosition] = useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const [projects, setProjects] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const closeModal = () => {
     setShowPosition(false);
   }
@@ -76,7 +77,34 @@ function PositionApp() {
       setPositions(_positions);
       setisLoading(false);
     }
+    async function fetchProjects() {
+      const _projectsobj = await positionApi.getProjects();
+           console.log(_projectsobj);
+      if(Object.entries(_projectsobj).length !== 0){
+        let _projects = _projectsobj.map(function (project) {
+            return { Val: project.id, Label: project.name };
+        });
+        setProjects(_projects);
+        setisLoading(false);
+      }
+    
+     
+    }
+    async function fetchEmployees() {
+      const _empobj = await positionApi.getEmployees();
+      if(Object.entries(_empobj).length !== 0){
+        let _employee = _empobj.map(function (emp) {
+            return { Val: emp.id, Label: emp.name };
+        });
+        setEmployees(_employee);
+        setisLoading(false);
+      }
+    
+     
+    }
     fetchPositions();
+    fetchProjects();
+    fetchEmployees();
   }, []);
 
   return (
@@ -91,7 +119,7 @@ function PositionApp() {
       </Button>
       <hr></hr>
       {!isLoading && <DataTable columns={columns} dataSource={positions} rowKey="id" />}
-      {showPosition ? <Position onCloseModal={closeModal} {...position} disabled={isDisabled}/> : null}
+      {showPosition ? <Position onCloseModal={closeModal} {...position} disabled={isDisabled} projects={projects} employees={employees}/> : null}
     </div>
   );
 }
