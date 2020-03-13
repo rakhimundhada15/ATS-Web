@@ -11,7 +11,7 @@ export default class PositionModel {
         this.title = '';
         this.experience = '';
         this.no_of_openings = '';
-        this.project_id = '';
+        this.project_id = null;
         this.employee_id = '';
         this.grade = '';
         this.skills = '';

@@ -57,17 +57,7 @@ class Position extends React.Component {
     window.location.reload(false);
   }
 
-    handleChange(e) {
-    let fields = this.state.fields;
-    fields[e.target.name] = e.target.value;
-    this.setState({
-      fields
-    });
-
-  }
-  
-
-  dropdown_onchange = (field, value) =>  {
+  handleChange = (field, value) =>  {
    
     let fields = this.state.fields;
    
@@ -132,11 +122,7 @@ class Position extends React.Component {
       formIsValid = false;
       errors["no_of_openings"] = "Please enter integer value.";
     }
-    if (!fields["project_id"]) {
-      formIsValid = false;
-      errors["project_id"] = "Please select project.";
-    }
-    if (!fields["employee_id"]) {
+   if (!fields["employee_id"]) {
       formIsValid = false;
       errors["employee_id"] = "Please select employee.";
     }
@@ -178,18 +164,18 @@ class Position extends React.Component {
          
             <div className="ant-row" >
               <div className="ant-col-12">
-                <TextInput disabled={this.state.props.disabled} label={'Position Name'} id={'title'} name={'title'} value={this.state.fields.title} isRequired={true} errorMsg={this.state.errors.title} onChange={this.handleChange} />
+                <TextInput disabled={this.state.props.disabled} label={'Position Name'} id={'title'} name={'title'} value={this.state.fields.title} isRequired={true} errorMsg={this.state.errors.title}  onChange={(e) =>this.handleChange("title",e.target.value)} />
               </div>
 
 
             <div className="ant-col-12">
-              <TextInput disabled={this.state.props.disabled} label={'Required Experience'} id={'experience'} name={'experience'} value={this.state.fields.experience} isRequired={true} errorMsg={this.state.errors.experience} onChange={this.handleChange} />
+              <TextInput disabled={this.state.props.disabled} label={'Required Experience'} id={'experience'} name={'experience'} value={this.state.fields.experience} isRequired={true} errorMsg={this.state.errors.experience} onChange={(e) =>this.handleChange("experience",e.target.value)} />
             </div>
           </div>
 
           <div className="ant-row" >
             <div className="ant-col-12">
-              <TextInput disabled={this.state.props.disabled} label={'No of Positions'} id={'no_of_openings'} name={'no_of_openings'} value={this.state.fields.no_of_openings} isRequired={true} errorMsg={this.state.errors.no_of_openings} onChange={this.handleChange} />
+              <TextInput disabled={this.state.props.disabled} label={'No of Positions'} id={'no_of_openings'} name={'no_of_openings'} value={this.state.fields.no_of_openings} isRequired={true} errorMsg={this.state.errors.no_of_openings} onChange={(e) =>this.handleChange("no_of_openings",e.target.value)} />
             </div>
 
               <div className="ant-col-12">
@@ -197,12 +183,10 @@ class Position extends React.Component {
                             name="project_id"
                             id="project_id"
                             placeHolder="Select Project"
-                            onChange={(e) =>this.dropdown_onchange("project_id",e)}
+                            onChange={(e) =>this.handleChange("project_id",e)}
                              value={this.state.fields.project_id}
                              label="Project" 
                              array={this.state.props.projects} 
-                             isRequired={true}
-                             error={this.state.errors.project_id }
                              containerClass="ant-col-24"
                              containerErrorClass="ant-col-24 has-error"
                              divLabelClass="ant-col ant-form-item-label ant-col-8"
@@ -218,7 +202,7 @@ class Position extends React.Component {
                             placeHolder="Select Employee"
                             isRequired={true}
                             error={this.state.errors.employee_id }
-                            onChange={(e) =>this.dropdown_onchange("employee_id",e)}
+                            onChange={(e) =>this.handleChange("employee_id",e)}
                             value={this.state.fields.employee_id}
                              label="Employee"  array={this.state.props.employees}
                              containerClass="ant-col-24"
@@ -229,7 +213,7 @@ class Position extends React.Component {
               </div>
                        
               <div className="ant-col-12">
-                <TextInput disabled={this.state.props.disabled} label={'Skills'} id={'skills'} name={'skills'} value={this.state.fields.skills} isRequired={true} errorMsg={this.state.errors.skills} onChange={this.handleChange} />
+                <TextInput disabled={this.state.props.disabled} label={'Skills'} id={'skills'} name={'skills'} value={this.state.fields.skills} isRequired={true} errorMsg={this.state.errors.skills} onChange={(e) =>this.handleChange("skills",e.target.value)} />
               </div>
             </div>
             <div className="ant-row" >
@@ -239,7 +223,7 @@ class Position extends React.Component {
                             placeHolder="Select Grade"
                             isRequired={true}
                             error={this.state.errors.grade }
-                            onChange={(e) =>this.dropdown_onchange("grade",e)}
+                            onChange={(e) =>this.handleChange("grade",e)}
                             value={this.state.fields.grade}
                              label="Grade"  array={this.state.grades}
                              containerClass="ant-col-24"
@@ -254,7 +238,7 @@ class Position extends React.Component {
                             placeHolder="Select Status"
                             isRequired={true}
                             error={this.state.errors.status }
-                            onChange={(e) =>this.dropdown_onchange("status",e)}
+                            onChange={(e) =>this.handleChange("status",e)}
                             value={this.state.fields.status}
                              label="Status"  array={this.state.statuses}
                              containerClass="ant-col-24"
