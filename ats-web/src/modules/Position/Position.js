@@ -105,8 +105,7 @@ class Position extends React.Component {
     e.preventDefault();
     if (this.validateForm()) {
       this.savePosition(this.state.fields);
-      this.onCancel();
-      this.refreshPage();
+     
     }
   }
 
