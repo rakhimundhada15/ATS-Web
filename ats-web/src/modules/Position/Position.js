@@ -45,7 +45,11 @@ class Position extends React.Component {
       //this.state.props.onCloseModal();
     }
     savePosition(position);
-    this.state.props.onCloseModal();
+    this.onCancel();
+        this.refreshPage();
+  }
+  refreshPage() {
+    window.location.reload(false);
   }
   handleChange= (e) => {
     let fields = this.state.fields;
