@@ -78,7 +78,7 @@ export default function CandidateInfo(props) {
                     <label className="ant-form-item">Resume:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item"><a href={details ? details.resume : "#"}>{details && details.resume}</a></label>
+                    <label className="ant-form-item"><a href={candidatesAPI.baseUrl+"/"+details.id+"/resume"}>Download</a></label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">Experience (yrs):</label>

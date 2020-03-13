@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom"
 import modules from './modules';
 import './index.css';
 import { Layout, Menu, Icon } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
+
 
 class App extends React.Component {
   state = {
@@ -23,7 +24,7 @@ class App extends React.Component {
         <Layout style={{height:'100%'}}>
           <Sider width={'224px'} trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentTab]}>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['Position']}>
               {modules.map(module => ( // with a name, and routes
                 <Menu.Item key={module.name}>
                   <Link to={module.routeProps.path} onClick={() => (this.state.currentTab = module.name)}>
@@ -54,6 +55,7 @@ class App extends React.Component {
             {/* <Footer style={{ textAlign: 'center' }}>Resource Recruitment Planning ©{new Date().getFullYear()} Created by Niyuj Enterprises</Footer> */}
           </Layout>
         </Layout>
+        <Redirect from="/" to="position" />
       </Router>
     )
   };
