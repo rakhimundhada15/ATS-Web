@@ -57,10 +57,7 @@ class Position extends React.Component {
     window.location.reload(false);
   }
 
-  refreshPage() {
-    window.location.reload(false);
-  }
-  handleChange(e) {
+    handleChange(e) {
     let fields = this.state.fields;
     fields[e.target.name] = e.target.value;
     this.setState({
