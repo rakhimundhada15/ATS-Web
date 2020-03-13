@@ -1,7 +1,9 @@
 import { handleResponse, handleError } from "./apiUtils";
 // const baseUrl = process.env.REACT_APP_API_URL + "/positions/";
+
 const basePortUrl = "http://13.233.58.211:7000";
 const baseUrl = basePortUrl + "/positions";
+
 export function getPositions() {
   return fetch(baseUrl)
     .then(handleResponse)
