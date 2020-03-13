@@ -10,22 +10,28 @@ export default function CandidateInfo(props) {
     const [details, setDetails] = useState({});
     const [showEditCandidate, setShowEditCandidate] = useState(false);
     const [referrerName, setReferrerName] = useState("");
+    const [reloadCandidate, setReloadCandidate] = useState(true);
+    
     useEffect(() => {
         async function fetchDetails() {
-            const _details = await candidatesAPI.getCandidate(props.id);
-            setDetails(_details);
+            if (reloadCandidate) {
+                const _details = await candidatesAPI.getCandidate(props.id);
+                setDetails(_details);
 
-            if(employeeList && _details){
-                let _referrerName = employeeList.filter(employee=>employee.id == _details.reffered_by)[0].name;
-                setReferrerName(_referrerName);
-              }
+                if (_details && _details.reffered_by != null && employeeList) {
+                    let _referrerName = employeeList.filter(employee => employee.id == _details.reffered_by)[0].name;
+                    setReferrerName(_referrerName);
+                }
+                setReloadCandidate(false);
+            }
         }
         fetchDetails();
-    }, []);
-    
- 
+    }, [reloadCandidate]);
+
+
     const toggleEditPopup = () => {
         setShowEditCandidate(!showEditCandidate);
+        setReloadCandidate(true);
     }
 
     return (
