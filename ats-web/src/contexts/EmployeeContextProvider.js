@@ -8,7 +8,7 @@ function EmployeeContextProvider({ children }) {
     useEffect(() => {
         if (!employees) {
             async function fetchEmployeeDetails() {
-                const _employeeDetails = await SharedApi.getEmployees();
+                const _employeeDetails = await SharedApi.getDetails('employees');
                 if (Object.entries(_employeeDetails).length !== 0) {
                     setEmployees(_employeeDetails);
                 }

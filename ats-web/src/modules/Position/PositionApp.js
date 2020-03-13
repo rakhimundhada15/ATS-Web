@@ -4,6 +4,7 @@ import Position from './Position';
 import { Button } from 'antd';
 import DataTable from '../../components/shared/dataTable';
 import * as positionApi from '../../api/positionApi';
+import * as SharedApi from '../../api/sharedApi';
 import PositionModel from './PositionModel';
 
 const deletePosition = (del) => {
@@ -78,7 +79,7 @@ function PositionApp() {
       setisLoading(false);
     }
     async function fetchProjects() {
-      const _projectsobj = await positionApi.getProjects();
+      const _projectsobj = await SharedApi.getDetails('projects');
            console.log(_projectsobj);
       if(Object.entries(_projectsobj).length !== 0){
         let _projects = _projectsobj.map(function (project) {
@@ -91,7 +92,7 @@ function PositionApp() {
      
     }
     async function fetchEmployees() {
-      const _empobj = await positionApi.getEmployees();
+      const _empobj = await SharedApi.getDetails('employees');
       if(Object.entries(_empobj).length !== 0){
         let _employee = _empobj.map(function (emp) {
             return { Val: emp.id, Label: emp.name };

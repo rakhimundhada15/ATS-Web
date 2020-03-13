@@ -40,13 +40,14 @@ class Position extends React.Component {
     ];
   }
   savePosition(position) {
+    console.log(position);
     async function savePosition(position) {
       const _position = await positionApi.savePosition(position);
       //this.state.props.onCloseModal();
+     
     }
     savePosition(position);
-    this.onCancel();
-        this.refreshPage();
+   
   }
   refreshPage() {
     window.location.reload(false);
@@ -96,6 +97,8 @@ class Position extends React.Component {
     e.preventDefault();
     if (this.validateForm()) {
       this.savePosition(this.state.fields);
+      this.onCancel();
+      this.refreshPage();
     }
   }
 
