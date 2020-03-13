@@ -81,11 +81,11 @@ const validateRequiredFields = (value) => {
         return errorMessages.requiredFieldError;
     }
 }
-const validateNumber = (number) => {
-    if (!number || number === "") {
+const validateNumber = (number) => {    
+    if (number === "") {
         return errorMessages.requiredFieldError;
     }
     if (isNaN(number) || number < 0) {
         return errorMessages.invalidNumberError;
-    }
+    }   
 }
