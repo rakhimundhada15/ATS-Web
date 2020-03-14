@@ -46,7 +46,7 @@ function ScheduleInterview(props) {
     useEffect(() => {
         async function fetchEmployeeDetails() {
             const employeeList = await SharedApi.getDetails('employees');
-            if (Object.entries(employeeList).length !== 0) {
+            if (employeeList && Object.entries(employeeList).length !== 0) {
                 const listOfEmployees = [];
                 employeeList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
@@ -58,7 +58,7 @@ function ScheduleInterview(props) {
         }
         async function fetchCandidateDetails() {
             const candidateList = await CandidateApi.getCandidates();
-            if (Object.entries(candidateList).length !== 0) {
+            if (candidateList && Object.entries(candidateList).length !== 0) {
                 const listOfCandidates = [];
                 candidateList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
@@ -77,7 +77,7 @@ function ScheduleInterview(props) {
         let scheduleDetailsErrors = { ...schedulerDetailsErrors };
 
         Object.keys(scheduleDetails).map(function (key) {
-            scheduleDetailsErrors = validate(scheduleDetailsErrors, key,scheduleDetails[key]);
+            return scheduleDetailsErrors = validate(scheduleDetailsErrors, key,scheduleDetails[key]);
         })
         setSchedulerDetailsErrors(scheduleDetailsErrors);
         if (Object.entries(scheduleDetailsErrors).length === 0) {
