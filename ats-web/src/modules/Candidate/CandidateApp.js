@@ -17,7 +17,9 @@ function CandidateApp() {
     async function fetchDetails() {
         setisLoading(true);
         const _details = await CandidateApi.getCandidates();
-        setListOfCandidates(_details);
+        if (_details && _details.length > 0) {
+          setListOfCandidates(_details);
+        }
         setisLoading(false);
         setReloadCandidates(false);
     }
