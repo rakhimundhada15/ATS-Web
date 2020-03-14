@@ -6,12 +6,7 @@ import DataTable from '../../components/shared/dataTable';
 import * as positionApi from '../../api/positionApi';
 import * as SharedApi from '../../api/sharedApi';
 import PositionModel from './PositionModel';
-import {Popconfirm} from 'antd';
-
-const deletePosition = (del) => {
-  //TO DO: Call API to delete position
-  console.log(del.key);
-}
+import Delete from '../../components/common/Popconfirm';
 
 function PositionApp() {
   const [positions, setPositions] = useState([new PositionModel()]);
@@ -21,8 +16,13 @@ function PositionApp() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [reload, setReload] = useState(false);
   const closeModal = () => {
     setShowPosition(false);
+  }
+  const reloadData = () => {
+    setisLoading(true);
+    setReload(true);
   }
 
   const getPosition = (id, isDisabled = false) => {
@@ -68,38 +68,30 @@ function PositionApp() {
         <span>
           <a onClick={() => getPosition(record.id)}>Edit</a>
           <Divider type="vertical" />
-          <Popconfirm title="Are you sure？" okText="Yes" cancelText="No" onConfirm={() => {deletePosition(record);}}>
-            <a>Delete</a>
-          </Popconfirm>
+          <Delete onYes={deletePosition} item={record} />
         </span>
       ),
     },
   ];
   function deletePosition(record){
     const deletePosition = async (record) => {
-      const _position = await positionApi.deletePosition(record.id);
-      window.location.reload(false);
+      await positionApi.deletePosition(record.id).then(
+        resolve => {
+          reloadData()
+        }
+      );
     };
     deletePosition(record);
   };
   useEffect(() => {
-    async function fetchPositions() {
-      const _positions = await positionApi.getPositions();
-      setPositions(_positions);
-      setisLoading(false);
-    }
     async function fetchProjects() {
       const _projectsobj = await SharedApi.getDetails('projects');
-           console.log(_projectsobj);
       if(Object.entries(_projectsobj).length !== 0){
         let _projects = _projectsobj.map(function (project) {
             return { Val: project.id, Label: project.name };
         });
         setProjects(_projects);
-        setisLoading(false);
       }
-    
-     
     }
     async function fetchEmployees() {
       const _empobj = await SharedApi.getDetails('employees');
@@ -108,15 +100,17 @@ function PositionApp() {
             return { Val: emp.id, Label: emp.name };
         });
         setEmployees(_employee);
-        setisLoading(false);
       }
-    
-     
     }
-    fetchPositions();
-    fetchProjects();
-    fetchEmployees();
-  }, []);
+    (async () => {
+      const _positions = await positionApi.getPositions();
+      setPositions(_positions);
+      fetchProjects();
+      fetchEmployees();
+      setisLoading(false);
+      setReload(false);
+    })();
+  }, [reload]);
 
   return (
 
@@ -132,7 +126,7 @@ function PositionApp() {
       </Button>
       <hr></hr>
       {!isLoading && <DataTable columns={columns} dataSource={positions} rowKey="id" />}
-      {showPosition ? <Position onCloseModal={closeModal} {...position} disabled={isDisabled} projects={projects} employees={employees}/> : null}
+      {showPosition ? <Position onCloseModal={closeModal} {...position} disabled={isDisabled} projects={projects} employees={employees} onChange={reloadData}/> : null}
     </div>
   );
 }
