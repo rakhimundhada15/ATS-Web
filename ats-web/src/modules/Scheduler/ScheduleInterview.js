@@ -19,7 +19,7 @@ function ScheduleInterview(props) {
         feedback: "",
         comments: ""
     }
-    
+
     const [schedulerDetails, setSchedulerDetails] = useState(defaultSchedulerDetails);
     const [schedulerDetailsErrors, setSchedulerDetailsErrors] = useState({});
     const [employeeDetails, setEmployeeDetails] = useState([]);
@@ -50,7 +50,7 @@ function ScheduleInterview(props) {
                 const listOfEmployees = [];
                 employeeList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
-                   return listOfEmployees.push(obj);
+                    return listOfEmployees.push(obj);
                 });
 
                 setEmployeeDetails(listOfEmployees);
@@ -73,32 +73,34 @@ function ScheduleInterview(props) {
     }, [])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let scheduleDetails = { ...schedulerDetails};
+        let scheduleDetails = { ...schedulerDetails };
         let scheduleDetailsErrors = { ...schedulerDetailsErrors };
 
         Object.keys(scheduleDetails).map(function (key) {
-            scheduleDetailsErrors = validate(scheduleDetailsErrors, key,scheduleDetails[key]);
+          return scheduleDetailsErrors = validate(scheduleDetailsErrors, key, scheduleDetails[key]);
         })
         setSchedulerDetailsErrors(scheduleDetailsErrors);
+      
         if (Object.entries(scheduleDetailsErrors).length === 0) {
+            
             setSchedulerDetails(scheduleDetails);
-            const responce = await InterviewsApi.setScheduleInterview(schedulerDetails)
-            if(responce.status==="OK"){
-                props.fetchScheduleInterviewDetails();
-            }
-            props.onCancel();
+                const responce = await InterviewsApi.setScheduleInterview(schedulerDetails)
+                props.onCancel();
+                if (responce.status === "OK") {
+                    props.fetchScheduleInterviewDetails();
+                }
         }
     }
     const resetForm = () => {
         props.onCancel();
     }
 
-
+    const [candidate, setCandidate] = useState({'candidate_id': ""})
     const errorMessages = resources.errorMessages();
     const validate = (_schedulerDetailsErrors, elementName, elementValue) => {
         let error = null;
         switch (elementName) {
-            case "job_has_candidate_id":               
+            case "job_has_candidate_id":
             case "chanel":
             case "location":
             case "schedule_time":
@@ -108,7 +110,7 @@ function ScheduleInterview(props) {
         }
         if (error) {
             _schedulerDetailsErrors[elementName] = error;
-        }else{
+        } else {
             delete _schedulerDetailsErrors[elementName];
         }
         return _schedulerDetailsErrors;
@@ -119,13 +121,27 @@ function ScheduleInterview(props) {
             return errorMessages.invalidFieldselection;
         }
     }
- 
+
     const handleOnChange = (key, value) => {
         let scheduleDetails = { ...schedulerDetails, [key]: value };
         setSchedulerDetails(scheduleDetails);
 
         let _schedulerDetailsErrors = { ...schedulerDetailsErrors, [key]: "" };
+        setSchedulerDetailsErrors(_schedulerDetailsErrors);
+    }
+
+    
+    const getJobHascandidateId = async(key,candidateId)=>{
+        let _candidateId={...candidate , [key]:candidateId}
+        setCandidate(_candidateId);
+        let _schedulerDetailsErrors = { ...schedulerDetailsErrors, 'job_has_candidate_id': "" };
         setSchedulerDetailsErrors(_schedulerDetailsErrors); 
+        const candidateAssociatePostion = await CandidateApi.getCandidate(candidateId+'/positions');
+        if(Object.keys(candidateAssociatePostion).length !==0){
+            let scheduleDetails = { ...schedulerDetails, 'job_has_candidate_id': candidateAssociatePostion[0].id };
+            setSchedulerDetails(scheduleDetails);
+         
+        }
     }
     return (
         <Modal title="Schedule Interview"
@@ -143,11 +159,11 @@ function ScheduleInterview(props) {
                         label="Candidate Name :"
                         name="job_has_candidate_id"
                         placeHolder="Select Candidate"
-                        onChange={(e) => handleOnChange('job_has_candidate_id', e)}
+                        onChange={(e) => getJobHascandidateId('candidate_id', e)}
                         isRequired={true}
                         array={candidateDetails}
-                        error={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id +' candidate' : ""}
-                        value={schedulerDetails.job_has_candidate_id ? schedulerDetails.job_has_candidate_id : ""}
+                        error={schedulerDetailsErrors.job_has_candidate_id ? schedulerDetailsErrors.job_has_candidate_id + ' valid candidate' : ""}
+                        value={candidate.candidate_id ? candidate.candidate_id : ""}
                     />
                 </div>
                 <div className='ant-col-12'>
@@ -156,7 +172,7 @@ function ScheduleInterview(props) {
                         placeHolder="Select Interviewer"
                         onChange={(e) => handleOnChange('employee_id', e)}
                         isRequired={true}
-                        error={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id +' interview panel' : ""}
+                        error={schedulerDetailsErrors.employee_id ? schedulerDetailsErrors.employee_id + ' interview panel' : ""}
                         value={schedulerDetails.employee_id ? schedulerDetails.employee_id : ""}
                         label='Interview panel' array={employeeDetails} />
                 </div>
@@ -168,13 +184,13 @@ function ScheduleInterview(props) {
                         placeHolder="Select mode of Interview"
                         onChange={(e) => handleOnChange('chanel', e)}
                         isRequired={true}
-                        error={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel +' mode of Interview': ""}
+                        error={schedulerDetailsErrors.chanel ? schedulerDetailsErrors.chanel + ' mode of Interview' : ""}
                         value={schedulerDetails.chanel ? schedulerDetails.chanel : ""}
                         label='Mode of Interview' array={modeOfInterview} />
                 </div>
                 <div className="ant-col-12">
                     <DateTimePicker id="schedule_time" name='scheduleTime' isRequired={true}
-                        label="Schedule Time" error={schedulerDetailsErrors.schedule_time ? schedulerDetailsErrors.schedule_time + ' Schedule Time' : ""} onChange={(date,dateString)=>handleOnChange('schedule_time',dateString)} />
+                        label="Schedule Time" error={schedulerDetailsErrors.schedule_time ? schedulerDetailsErrors.schedule_time + ' Schedule Time' : ""} onChange={(date, dateString) => handleOnChange('schedule_time', dateString)} />
 
                 </div>
             </div>
@@ -185,7 +201,7 @@ function ScheduleInterview(props) {
                         placeHolder="Select location"
                         onChange={(e) => handleOnChange('location', e)} label='Interview Location'
                         value={schedulerDetails.location ? schedulerDetails.location : ""}
-                        error={schedulerDetailsErrors.location ? schedulerDetailsErrors.location +' location': ""}
+                        error={schedulerDetailsErrors.location ? schedulerDetailsErrors.location + ' location' : ""}
                         array={interviewLocation}
                         isRequired={true} />
                 </div>
@@ -199,7 +215,7 @@ function ScheduleInterview(props) {
                         rows={5}
                         minlength={0}
                         value={schedulerDetails.comments ? schedulerDetails.comments : ""}
-                        onChange={(e) => handleOnChange('comments',e)}
+                        onChange={(e) => handleOnChange('comments', e)}
                         disable={false}
                     />
                 </div>
@@ -211,7 +227,7 @@ function ScheduleInterview(props) {
                         rows={5}
                         minlength={0}
                         value={schedulerDetails.feedback ? schedulerDetails.feedback : ""}
-                        onChange={(e) => handleOnChange('feedback',e)}
+                        onChange={(e) => handleOnChange('feedback', e)}
                         disable={false}
                     />
                 </div>

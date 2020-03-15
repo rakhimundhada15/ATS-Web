@@ -10,22 +10,28 @@ export default function CandidateInfo(props) {
     const [details, setDetails] = useState({});
     const [showEditCandidate, setShowEditCandidate] = useState(false);
     const [referrerName, setReferrerName] = useState("");
+    const [reloadCandidate, setReloadCandidate] = useState(true);
+    
     useEffect(() => {
         async function fetchDetails() {
-            const _details = await candidatesAPI.getCandidate(props.id);
-            setDetails(_details);
+            if (reloadCandidate) {
+                const _details = await candidatesAPI.getCandidate(props.id);
+                setDetails(_details);
 
-            if(employeeList && _details){
-                let _referrerName = employeeList.filter(employee=>employee.id == _details.reffered_by)[0].name;
-                setReferrerName(_referrerName);
-              }
+                if (_details && _details.reffered_by != null && employeeList) {
+                    let _referrerName = employeeList.filter(employee => employee.id == _details.reffered_by)[0].name;
+                    setReferrerName(_referrerName);
+                }
+                setReloadCandidate(false);
+            }
         }
         fetchDetails();
-    }, []);
-    
- 
+    }, [reloadCandidate]);
+
+
     const toggleEditPopup = () => {
         setShowEditCandidate(!showEditCandidate);
+        setReloadCandidate(true);
     }
 
     return (
@@ -72,7 +78,7 @@ export default function CandidateInfo(props) {
                     <label className="ant-form-item">Resume:</label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
-                    <label className="ant-form-item"><a href={details ? details.resume : "#"}>{details && details.resume}</a></label>
+                    <label className="ant-form-item"><a href={candidatesAPI.baseUrl+"/"+details.id+"/resume"}>Download</a></label>
                 </div>
                 <div className="ant-col ant-form-item-label ant-col-6">
                     <label className="ant-form-item">Experience (yrs):</label>

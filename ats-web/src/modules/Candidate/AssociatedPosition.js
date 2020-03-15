@@ -50,13 +50,16 @@ function AssociatedPosition(props) {
     const [associatePosition, setAssociatePosition] = useState(defaultAssociatePosition);
     const [associatePositionError, setAssociatePositionError] = useState({});
     const [visible, setVisible] = useState(false);
+    const [reloadAssociateCandidates, setReloadAssociateCandidates] = useState(false);
     useEffect(() => {
         async function candidateAssociatedPositionDetails() {
+            setisLoading(true);
             const candidateAssociatePostion = await CandidateApi.getCandidate(props.id+'/positions');
             if(Object.keys(candidateAssociatePostion).length !==0){
                 setCandidateAssociatedPositions(candidateAssociatePostion);
             }
             setisLoading(false);
+            setReloadAssociateCandidates(false);
            
         }
         async function fetchProjectsDetails() {
@@ -65,7 +68,7 @@ function AssociatedPosition(props) {
                 const listOfProject = [];
                 projectList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.name, 'key': list.id }
-                    listOfProject.push(obj);
+                   return listOfProject.push(obj);
                 });
 
                 setProjectNames(listOfProject);
@@ -77,7 +80,7 @@ function AssociatedPosition(props) {
                 const listOfPosition = [];
                 positionList.map((list) => {
                     let obj = { "Val": list.id, "Label": list.title, 'key': list.id }
-                    listOfPosition.push(obj);
+                  return listOfPosition.push(obj);
                 });
 
                 setOpenPositions(listOfPosition);
@@ -86,7 +89,7 @@ function AssociatedPosition(props) {
         candidateAssociatedPositionDetails();
         fetchPositionsDetails();
         fetchProjectsDetails();
-    }, [])
+    }, [reloadAssociateCandidates])
 
     const showUserModal = (showmodel) => {
         if (showmodel) {
@@ -117,7 +120,7 @@ function AssociatedPosition(props) {
         if (!errorCount) {
          let responce =  await CandidateApi.saveAssociateCandidate(associatePosition);
          if(responce.id){
-            //candidateAssociatedPositionDetails();
+            setReloadAssociateCandidates(true);
          }
             setVisible(false);
         }

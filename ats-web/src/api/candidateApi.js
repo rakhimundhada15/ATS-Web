@@ -1,5 +1,5 @@
 import { handleResponse, handleError } from "./apiUtils";
-const baseUrl = "http://13.233.58.211:5000/candidates";
+export const baseUrl = "http://13.233.58.211:5000/candidates";
 
 export async function getCandidates() {
   try {
@@ -37,7 +37,7 @@ async function saveResume(candidate,resume){
     const data = new FormData();
     data.append('resume', resume)
 
-    return await fetch(baseUrl + "/resume/"+candidate.id, 
+    return await fetch(baseUrl +"/"+candidate.id+ "/resume", 
     {
       method: "POST", 
       body: data

@@ -8,9 +8,7 @@ class DataTable extends React.Component {
             dataSource: this.props.dataSource
         };
     }
-    onChange = (pagination, filters, sorter, extra) => {
-        this.props.onChange(pagination, filters, sorter, extra);
-    }
+    
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, value) => {
@@ -74,7 +72,7 @@ class DataTable extends React.Component {
                         </div>
                     </div>
                 </Form>
-                <Table rowKey={this.props.rowKey} columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.onChange} pagination={{ pageSize: 10 }} />
+                <Table rowKey={this.props.rowKey} columns={this.props.columns} dataSource={this.state.dataSource} onChange={this.props.onChange} pagination={{ pageSize: 10 }} />
 
             </div>
         )

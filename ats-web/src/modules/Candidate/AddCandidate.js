@@ -14,7 +14,7 @@ let _defaultCandidateDetails = {
   address: "",
   name: "",
   skills: "",
-  reffered_by: "",
+  reffered_by: null,
   source: "",
   status: "",
   current_ctc: "",
@@ -110,7 +110,7 @@ function AddCandidate(props) {
   const handleOnSelectChange = (field, value) => {
     let _candidateDetails = { ...candidateDetails, [field]: value };
     if (field === "source" && value !== "Referral") {
-      _candidateDetails.reffered_by = 0;
+      _candidateDetails.reffered_by = null;
     }
     setCandidateDetails(_candidateDetails);
     let _candidateDetailErrors = { ...candidateDetailErrors, [field]: "" };
