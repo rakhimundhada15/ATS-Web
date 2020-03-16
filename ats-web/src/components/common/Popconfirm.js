@@ -8,12 +8,14 @@ function Delete(props) {
   }
 
   function cancel(e) {
-    if(props.OnCancel)
-    props.OnCancel(e);
+    if (props.OnCancel) {
+      props.OnCancel(e);
+    }
   }
 
   return (
     <Popconfirm
+      onYes={confirm}
       title="Are you sure?"
       onConfirm={confirm}
       onCancel={cancel}
