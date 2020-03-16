@@ -45,18 +45,16 @@ class Position extends React.Component {
   }
   savePosition(position) {
     const savePosition = async (position) => {
-      await positionApi.savePosition(position).then(() => {
-        this.onCancel();
-        this.refreshPage();
-      });
+      await positionApi.savePosition(position).then(
+        resolve => {
+          this.onCancel();
+          this.state.props.onChange();
+        }
+      );
     };
     savePosition(position);
    
   }
-  refreshPage() {
-    window.location.reload(false);
-  }
-
   handleChange = (field, value) =>  {
    
     let fields = this.state.fields;

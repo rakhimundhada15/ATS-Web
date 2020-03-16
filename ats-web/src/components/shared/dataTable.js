@@ -9,7 +9,7 @@ class DataTable extends React.Component {
         };
     }
     onChange = (pagination, filters, sorter, extra) => {
-        this.props.onChange(pagination, filters, sorter, extra);
+        // this.props.onChange(pagination, filters, sorter, extra);
     }
     handleSubmit = e => {
         e.preventDefault();
